@@ -9,6 +9,22 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.13"
+    "@astrojs/node": "^9.2.1",
+    "@astrojs/solid-js": "^5.0.10",
+    "@kobalte/core": "^0.13.9",
+    "@tailwindcss/vite": "^4.1.6",
+    "astro": "^5.7.13",
+    "date-fns": "^4.1.0",
+    "firebase": "^11.7.1",
+    "firebase-admin": "^13.4.0",
+    "react-dropzone": "^14.3.8",
+    "solid-js": "^1.9.6",
+    "tailwindcss": "^4.1.6",
+    "zod": "^3.24.4",
+    "zod-form-data": "^2.0.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16"
   }
 }

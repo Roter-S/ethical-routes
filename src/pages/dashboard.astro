@@ -1,0 +1,48 @@
+---
+import Layout from "@layouts/Layout.astro";
+import BirthdayList from "@components/EthicalRouteList";
+import { firestore } from "@lib/firebase/server";
+import type { BirthdayTypeWithId } from "@lib/types";
+import { getUser } from "@lib/utils";
+import { getDifferenceInDays } from "@lib/utils";
+import AppLayout from "@layouts/AppLayout.astro";
+
+/* Get session cookie */
+const sessionCookie = Astro.cookies.get("session")?.value ?? null;
+if (!sessionCookie) {
+  return Astro.redirect("/signin");
+}
+
+/* Verify session cookie and get user */
+const user = await getUser(sessionCookie);
+if (!user) {
+  return Astro.redirect("/signin");
+}
+
+const querySnashot = await firestore
+  .collection("birthdays")
+  .where("authorId", "==", user.uid)
+  .get();
+
+const documents = querySnashot.docs.map((doc) => {
+  return { documentId: doc.id, ...doc.data() };
+}) as BirthdayTypeWithId[];
+
+/* compute difference in days and sort */
+const birthdays = getDifferenceInDays(documents).sort(
+  (a, b) => a.difference - b.difference
+);
+---
+
+<Layout title="Dashboard">
+  <AppLayout>
+    <main class="w-full grow flex flex-col items-center px-4">
+      <h1
+        class="text-xl sm:text-3xl max-w-xl dark:text-zinc-100 w-full text-zinc-900 font-semibold mt-10 mb-6"
+      >
+        Listado de casos éticos
+      </h1>
+      <BirthdayList birthdays={birthdays} client:idle />
+    </main>
+  </AppLayout>
+</Layout>

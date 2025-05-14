@@ -1,11 +1,68 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "@layouts/Layout.astro";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home">
+  <main class="relative py-16">
+    <div class="relative">
+      <div class="flex items-center justify-center -space-x-2">
+        <img
+          loading="lazy"
+          width="200"
+          height="200"
+          src="./images/logo.svg"
+          alt="member photo"
+          class="rounded-full object-cover"
+        />
+      </div>
+      <div class="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
+        <h1
+          class="text-center text-4xl font-bold text-gray-800 dark:text-white md:text-5xl"
+        >
+          Rutas Ética
+        </h1>
+        <div class="mt-6 m-auto md:w-8/12 lg:w-7/12">
+          <p class="prose mx-auto dark:prose-invert text-justify">
+            Este sistema interactivo presenta una serie de casos relacionados
+            con la ciberseguridad, diseñados para explorar dilemas éticos reales
+            que pueden surgir en la práctica profesional.<br />
+            Los usuarios deberán tomar decisiones en cada etapa del caso, enfrentándose
+            a situaciones donde los valores éticos y los intereses tecnológicos pueden
+            entrar en conflicto.<br />
+            A medida que se avanza en el caso, el sistema construye un árbol de decisiones
+            que refleja las elecciones realizadas, permitiendo visualizar cómo cada
+            decisión impacta en el desarrollo del dilema.<br />
+            Al finalizar, se genera una reflexión personalizada basada en el camino
+            tomado, junto con un consejo ético que invita a cuestionar la ruta elegida
+            y considerar otras perspectivas.<br />
+            Este enfoque no solo promueve la toma de decisiones informada, sino que
+            también fortalece la conciencia ética en contextos críticos de la seguridad
+            informática.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-6 mt-20">
+          <a
+            href="/signin"
+            class="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+          >
+            <span
+              class="relative text-base font-semibold text-white dark:text-dark"
+            >
+              Iniciar Sesión</span
+            >
+          </a>
+          <a
+            href="/signup"
+            class="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+          >
+            <span
+              class="relative text-base font-semibold text-primary dark:text-white"
+              >Registrarse</span
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
 </Layout>

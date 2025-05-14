@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 635 797.1">
+  <!-- Generator: Adobe Illustrator 29.5.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 137)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+      }
+
+      .st1 {
+        fill: #b2b7bb;
+      }
+
+      .st2 {
+        fill: #9ca1a9;
+      }
+
+      .st3 {
+        fill: #edf0f1;
+      }
+
+      .st4 {
+        fill: #fff;
+      }
+
+      .st5 {
+        fill: url(#Degradado_sin_nombre_221);
+      }
+
+      .st6 {
+        fill: url(#Degradado_sin_nombre_7);
+      }
+
+      .st7 {
+        fill: url(#Degradado_sin_nombre_2);
+      }
+
+      .st8 {
+        fill: #f7fbfc;
+      }
+
+      .st9 {
+        fill: #fcfcfa;
+      }
+
+      .st10 {
+        fill: url(#Degradado_sin_nombre_32);
+      }
+
+      .st11 {
+        fill: url(#Degradado_sin_nombre_29);
+      }
+
+      .st12 {
+        fill: url(#Degradado_sin_nombre_22);
+      }
+
+      .st13 {
+        fill: #fafeff;
+      }
+
+      .st14 {
+        fill: #a49fa3;
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_2" data-name="Degradado sin nombre 2" x1="525.3" y1="441" x2="525.3" y2="410.8" gradientTransform="translate(-27.4 763.8) rotate(3.8) scale(1 -1)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#404040"/>
+      <stop offset="1" stop-color="#c8ced9"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_32" data-name="Degradado sin nombre 32" x1="408.5" y1="362" x2="569" y2="362" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#dae3e2"/>
+      <stop offset=".5" stop-color="#b6babb"/>
+      <stop offset="1" stop-color="#d0d4d6"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_22" data-name="Degradado sin nombre 22" x1="357.1" y1="404.8" x2="499.7" y2="404.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4e5053"/>
+      <stop offset="1" stop-color="#d3d7db"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_221" data-name="Degradado sin nombre 22" x1="379" y1="167.6" x2="458.5" y2="167.6" xlink:href="#Degradado_sin_nombre_22"/>
+    <linearGradient id="Degradado_sin_nombre_7" data-name="Degradado sin nombre 7" x1="262.2" y1="441" x2="262.2" y2="410.8" gradientTransform="translate(-297.6 664.3) rotate(-93.8)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#404040"/>
+      <stop offset="1" stop-color="#c8ced9"/>
+    </linearGradient>
+    <linearGradient id="Degradado_sin_nombre_29" data-name="Degradado sin nombre 29" x1="135.4" y1="404.8" x2="277.9" y2="404.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#babec2"/>
+      <stop offset=".5" stop-color="#b6babb"/>
+      <stop offset="1" stop-color="#d0d4d6"/>
+    </linearGradient>
+  </defs>
+  <g id="Capa_1-2">
+    <path class="st9" d="M347.2,737.9h-12.4v-221c0-44.8,36.4-81.2,81.2-81.2h151.5v12.4h-151.5c-38,0-68.8,30.9-68.8,68.8v221Z"/>
+    <path class="st14" d="M501.3,326.4h-48.9v-12.4h48.9c6.3,0,12.2-2.5,16.7-6.9,4.7-4.7,7.2-10.9,7.2-17.5,0-12.5,10.2-22.8,22.8-22.8h24.7v12.4h-24.7c-5.7,0-10.4,4.7-10.4,10.4,0,9.9-3.9,19.2-10.9,26.3-6.8,6.8-15.8,10.5-25.5,10.5h0Z"/>
+    <rect class="st7" x="519.1" y="359.4" width="12.4" height="29.4" transform="translate(-23.9 36.1) rotate(-3.8)"/>
+    <rect class="st10" x="408.5" y="355.8" width="160.5" height="12.4"/>
+    <path class="st12" d="M361.6,414.3l-4.4-11.6c24.7-9.5,84.6-7.9,142.5-6.3l-.3,12.4c-54-1.5-115.3-3.1-137.7,5.5h0Z"/>
+    <path class="st9" d="M323.7,766.7h-12.4v-265.6c0-34.5,14.2-68.1,38.8-92.3l221-216,8.7,8.9-221,216c-22.3,21.8-35.1,52.2-35.1,83.4v265.6h0Z"/>
+    <rect class="st9" x="355.4" y="215.7" width="186.7" height="12.4" transform="translate(-24.6 384.9) rotate(-45.3)"/>
+    <polygon class="st5" points="387.2 219.2 379 209.9 446.2 150.2 446.2 116 458.5 116 458.5 155.8 387.2 219.2"/>
+    <rect class="st9" x="375.7" y="146.7" width="12.4" height="237.9" transform="translate(-4.2 6.2) rotate(-.9)"/>
+    <rect class="st9" x="311" y="50.4" width="12.4" height="716.3"/>
+    <rect class="st9" x="373.8" y="87.7" width="12.4" height="35"/>
+    <circle class="st4" cx="380" cy="134.3" r="6.8"/>
+    <circle class="st2" cx="601.2" cy="270.2" r="19"/>
+    <circle class="st3" cx="521.8" cy="199.2" r="9"/>
+    <circle class="st9" cx="478.8" cy="239.1" r="9"/>
+    <circle class="st2" cx="598.6" cy="359.4" r="19"/>
+    <circle class="st9" cx="598.6" cy="440.5" r="19"/>
+    <circle class="st2" cx="453.3" cy="517" r="19"/>
+    <circle class="st9" cx="524.3" cy="401.9" r="9.1"/>
+    <circle class="st9" cx="524.3" cy="482" r="9.1"/>
+    <circle class="st13" cx="597.5" cy="180.7" r="19"/>
+    <circle class="st2" cx="531.7" cy="131" r="19"/>
+    <circle class="st2" cx="456" cy="89.4" r="19"/>
+    <circle class="st8" cx="383.1" cy="60.6" r="19"/>
+    <circle class="st8" cx="318.7" cy="25.9" r="19"/>
+    <g>
+      <line class="st0" x1="524.3" y1="440.5" x2="526.3" y2="469.9"/>
+      <rect class="st9" x="519.1" y="440.5" width="12.4" height="29.4" transform="translate(-29.4 36.3) rotate(-3.8)"/>
+    </g>
+    <path class="st9" d="M456.3,491.3l-12.4-.6c1-21.8-11.6-33.3-44.8-41.3l2.9-12c17.8,4.3,29.6,9.3,38.2,16.3,11.3,9.2,16.7,21.8,16,37.6h0Z"/>
+    <path class="st9" d="M287.8,737.9h12.4v-221c0-44.8-36.4-81.2-81.2-81.2H67.5v12.4h151.5c38,0,68.8,30.9,68.8,68.8v221Z"/>
+    <path class="st1" d="M133.8,326.4h48.9v-12.4h-48.9c-6.3,0-12.2-2.5-16.7-6.9-4.7-4.7-7.2-10.9-7.2-17.5,0-12.5-10.2-22.8-22.8-22.8h-24.7v12.4h24.7c5.7,0,10.4,4.7,10.4,10.4,0,9.9,3.9,19.2,10.9,26.3,6.8,6.8,15.8,10.5,25.5,10.5h0Z"/>
+    <rect class="st6" x="95" y="367.9" width="29.4" height="12.4" transform="translate(-270.9 458.5) rotate(-86.2)"/>
+    <rect class="st1" x="66.1" y="355.8" width="160.5" height="12.4"/>
+    <path class="st11" d="M273.5,414.3l4.4-11.6c-24.7-9.5-84.6-7.9-142.5-6.3l.3,12.4c54-1.5,115.3-3.1,137.7,5.5Z"/>
+    <path class="st9" d="M311.3,766.7h12.4v-265.6c0-34.5-14.2-68.1-38.8-92.3L63.9,192.9l-8.7,8.9,221,216c22.3,21.8,35.1,52.2,35.1,83.4v265.6h0Z"/>
+    <rect class="st9" x="180" y="128.5" width="12.4" height="186.7" transform="translate(-102.2 195.1) rotate(-44.7)"/>
+    <polygon class="st1" points="247.8 219.2 256 209.9 188.9 150.2 188.9 116 176.5 116 176.5 155.8 247.8 219.2"/>
+    <rect class="st9" x="134.2" y="259.5" width="237.9" height="12.4" transform="translate(-16.6 514.6) rotate(-89.1)"/>
+    <rect class="st9" x="311.7" y="50.4" width="12.4" height="716.3"/>
+    <rect class="st9" x="248.9" y="87.7" width="12.4" height="35"/>
+    <circle class="st4" cx="255.1" cy="134.3" r="6.8"/>
+    <circle class="st2" cx="33.9" cy="270.2" r="19"/>
+    <circle class="st3" cx="113.3" cy="199.2" r="9"/>
+    <circle class="st9" cx="156.2" cy="239.1" r="9"/>
+    <circle class="st2" cx="36.4" cy="359.4" r="19"/>
+    <circle class="st9" cx="36.4" cy="440.5" r="19"/>
+    <circle class="st2" cx="181.8" cy="517" r="19"/>
+    <circle class="st9" cx="110.7" cy="401.9" r="9.1"/>
+    <circle class="st9" cx="110.7" cy="482" r="9.1"/>
+    <circle class="st9" cx="318.7" cy="781.7" r="9.1"/>
+    <circle class="st9" cx="342.6" cy="753.1" r="9.1"/>
+    <circle class="st9" cx="294.9" cy="753.1" r="9.1"/>
+    <circle class="st13" cx="37.5" cy="180.7" r="19"/>
+    <circle class="st2" cx="103.4" cy="131" r="19"/>
+    <circle class="st2" cx="179" cy="89.4" r="19"/>
+    <circle class="st8" cx="251.9" cy="60.6" r="19" transform="translate(148.5 298.2) rotate(-80)"/>
+    <circle class="st8" cx="316.3" cy="25.9" r="19"/>
+    <g>
+      <line class="st0" x1="110.7" y1="440.5" x2="108.7" y2="469.9"/>
+      <rect class="st9" x="95" y="449" width="29.4" height="12.4" transform="translate(-351.8 534.1) rotate(-86.2)"/>
+    </g>
+    <path class="st9" d="M178.8,491.3l12.4-.6c-1-21.8,11.6-33.3,44.8-41.3l-2.9-12c-17.8,4.3-29.6,9.3-38.2,16.3-11.3,9.2-16.7,21.8-16,37.6h0Z"/>
+  </g>
+</svg>
