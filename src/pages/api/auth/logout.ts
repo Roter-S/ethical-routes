@@ -1,21 +1,23 @@
 import { auth } from "@lib/firebase/server";
 import type { APIRoute } from "astro";
 
-export const POST: APIRoute = async ({ cookies }) => {
-  const sessionCookie = cookies.get("session")?.value;
-  if (sessionCookie) {
+export const POST: APIRoute = async ({ cookies, redirect }) => {
+  const sessionCookieValue = cookies.get("session")?.value;
+
+  if (sessionCookieValue) {
     try {
-      const { uid } = await auth.verifySessionCookie(sessionCookie, true);
-      await auth.revokeRefreshTokens(uid);
-    } catch {
-      console.error("Error revoking refresh tokens");
+      const decodedClaims = await auth.verifySessionCookie(sessionCookieValue, true);
+      await auth.revokeRefreshTokens(decodedClaims.uid);
+    } catch (error) {
+      console.error("Error durante la verificación de la cookie de sesión o la revocación de tokens:", error);
     }
   }
 
-  cookies.set("session", "", {
+  // Eliminar la cookie de sesión del navegador.
+  cookies.delete("session", {
     path: "/",
-    expires: new Date(0),
   });
+
 
   return new Response(null, { status: 204 });
 };

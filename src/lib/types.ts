@@ -3,6 +3,7 @@ export interface EthicalRouteType {
   description: string;
   participations: number;
   created_at: Date | { seconds: number; nanoseconds: number };
+  branches: Record<string, BranchType>;
 }
 
 export interface EthicalRouteTypeWithId extends EthicalRouteType {

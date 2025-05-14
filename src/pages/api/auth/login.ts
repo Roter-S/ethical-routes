@@ -1,43 +1,42 @@
 import type { APIRoute } from "astro";
-import { auth, firestore } from "@lib/firebase/server";
-import admin from "firebase-admin";
+import { auth } from "@lib/firebase/server";
 import { syncUserToFirestore } from "@lib/syncUser";
 
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   try {
     const { idToken }: { idToken?: string } = await request.json();
     if (!idToken) {
-      return new Response(JSON.stringify({ error: "No token provided" }), {
+      return new Response(JSON.stringify({ error: "Token no proporcionado" }), {
         status: 400,
       });
     }
 
-    const decoded = await auth.verifyIdToken(idToken);
+    const decodedToken = await auth.verifyIdToken(idToken);
     await syncUserToFirestore({
-      uid: decoded.uid,
-      email: decoded.email || null,
-      name: decoded.name || null,
+      uid: decodedToken.uid,
+      email: decodedToken.email || null,
+      name: decodedToken.name || null,
     });
 
-    const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 días
+    const fiveDaysInMs = 5 * 24 * 60 * 60 * 1000;
     const sessionCookie = await auth.createSessionCookie(idToken, {
-      expiresIn,
+      expiresIn: fiveDaysInMs,
     });
 
     cookies.set("session", sessionCookie, {
       httpOnly: true,
       path: "/",
-      maxAge: expiresIn / 1000,
+      maxAge: fiveDaysInMs / 1000,
       secure: import.meta.env.PROD,
+      sameSite: "lax",
     });
 
     return redirect("/dashboard", 302);
-  } catch (err: any) {
-    console.error("Login error:", err);
+  } catch (error: any) {
+    console.error("Error en el inicio de sesión:", error);
+    const errorMessage = error.code || error.message || "Fallo en la autenticación";
     return new Response(
-      JSON.stringify({
-        error: err.code || err.message || "Authentication failed",
-      }),
+      JSON.stringify({ error: errorMessage }),
       { status: 401 }
     );
   }

@@ -1,37 +1,62 @@
 import type { ServiceAccount } from "firebase-admin";
 import { getApps, initializeApp, cert } from "firebase-admin/app";
+import type { App as AdminApp } from "firebase-admin/app"; // Type-only import
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 
-const activeApps = getApps();
-const serviceAccount = {
-  type: "service_account",
-  project_id: import.meta.env.FIREBASE_PROJECT_ID,
-  private_key_id: import.meta.env.FIREBASE_PRIVATE_KEY_ID,
-  private_key: import.meta.env.FIREBASE_PRIVATE_KEY,
-  client_email: import.meta.env.FIREBASE_CLIENT_EMAIL,
-  client_id: import.meta.env.FIREBASE_CLIENT_ID,
-  auth_uri: import.meta.env.FIREBASE_AUTH_URI,
-  token_uri: import.meta.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: import.meta.env.FIREBASE_AUTH_CERT_URL,
-  client_x509_cert_url: import.meta.env.FIREBASE_CLIENT_CERT_URL,
-};
-
-const initApp = () => {
-  if (import.meta.env.PROD) {
-    console.info("PROD env detected. Using default service account.");
-    // Use default config in firebase functions. Should be already injected in the server by Firebase.
-    return initializeApp();
+function initializeAdminApp(): AdminApp {
+  if (getApps().length > 0) {
+    return getApps()[0];
   }
-  console.info("Loading service account from env.");
-  return initializeApp({
-    credential: cert(serviceAccount as ServiceAccount),
-  });
-};
 
-const firebaseAdminApp = activeApps.length === 0 ? initApp() : activeApps[0];
+  // Intenta inicialización por defecto en producción si no hay FIREBASE_PROJECT_ID (para entornos como Cloud Functions)
+  if (import.meta.env.PROD && !import.meta.env.FIREBASE_PROJECT_ID) {
+    console.info(
+      "PROD env & no FIREBASE_PROJECT_ID, attempting default app initialization."
+    );
+    try {
+      return initializeApp();
+    } catch (e) {
+      console.warn("Default app initialization failed. Proceeding with service account if configured: ", e);
+    }
+  }
+
+  // Variables de entorno requeridas para crear las credenciales de la cuenta de servicio
+  const requiredEnvVarsForServiceAccount: (keyof ServiceAccount | 'FIREBASE_PRIVATE_KEY')[] = [
+    'projectId',
+    'clientEmail',
+    // 'privateKey' se maneja a través de FIREBASE_PRIVATE_KEY por la necesidad de reemplazar \n
+  ];
+  const envVarNames = {
+      projectId: "FIREBASE_PROJECT_ID",
+      clientEmail: "FIREBASE_CLIENT_EMAIL",
+      privateKey: "FIREBASE_PRIVATE_KEY"
+  }
+
+  const missingVars: string[] = [];
+  if (!import.meta.env.FIREBASE_PROJECT_ID) missingVars.push("FIREBASE_PROJECT_ID");
+  if (!import.meta.env.FIREBASE_CLIENT_EMAIL) missingVars.push("FIREBASE_CLIENT_EMAIL");
+  if (!import.meta.env.FIREBASE_PRIVATE_KEY) missingVars.push("FIREBASE_PRIVATE_KEY");
+
+  if (missingVars.length > 0) {
+    throw new Error(
+      `Missing Firebase Admin SDK service account environment variables: ${missingVars.join(", ")}.`
+    );
+  }
+  
+  console.info("Initializing Firebase Admin SDK with service account from environment variables.");
+  
+  const serviceAccountCredentials: ServiceAccount = {
+    projectId: import.meta.env.FIREBASE_PROJECT_ID!,
+    clientEmail: import.meta.env.FIREBASE_CLIENT_EMAIL!,
+    privateKey: import.meta.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+  };
+
+  return initializeApp({ credential: cert(serviceAccountCredentials) });
+}
+
+const firebaseAdminApp: AdminApp = initializeAdminApp();
 const auth = getAuth(firebaseAdminApp);
 const firestore = getFirestore(firebaseAdminApp);
 
-export { auth, firestore };
-export default firebaseAdminApp;
+export { auth, firestore, firebaseAdminApp };

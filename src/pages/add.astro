@@ -1,29 +1,16 @@
 ---
-import { getUser, redirectToSignin } from "@lib/utils";
 import Layout from "@layouts/Layout.astro";
 import AppLayout from "@layouts/AppLayout.astro";
 import EthicalRouteDropzone from "@components/EthicalRouteDropzone";
-
-// Obtener cookie de sesión
-const sessionCookie = Astro.cookies.get("session")?.value ?? null;
-if (!sessionCookie) {
-  return redirectToSignin();
-}
-
-// Verificar sesión y usuario
-const user = await getUser(sessionCookie);
-if (!user) {
-  return redirectToSignin();
-}
 ---
 
-<Layout title="Sign in">
+<Layout title="Agregar Caso Ético - Rutas Éticas">
   <AppLayout>
     <main class="w-full h-full flex flex-col items-center p-4">
       <section class="w-full max-w-md">
         <a
           href="/dashboard/"
-          class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400"
+          class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -38,15 +25,15 @@ if (!user) {
               stroke-linejoin="round"
               d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"></path>
           </svg>
-          Regresar
+          Regresar al Dashboard
         </a>
         <h1
           class="font-semibold sm:text-2xl text-xl dark:text-zinc-100 text-zinc-900 w-full mb-6"
         >
-          Agregar caso ético
+          Agregar Nuevo Caso Ético
         </h1>
       </section>
       <EthicalRouteDropzone client:load />
     </main>
-  </AppLayout></Layout
->
+  </AppLayout>
+</Layout>

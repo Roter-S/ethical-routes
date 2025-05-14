@@ -1,20 +1,25 @@
 import { getAuth } from "firebase/auth";
-import { getApps, initializeApp } from "firebase/app";
+import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-const activeApps = getApps();
+// Configuración de Firebase obtenida de variables de entorno públicas
 const firebaseConfig = {
-  apiKey: "AIzaSyCifNe8Qya1v5jkWU_IDxTbTTtjfQsR7h4",
-  authDomain: "ethical-routes-7a597.firebaseapp.com",
-  projectId: "ethical-routes-7a597",
-  storageBucket: "ethical-routes-7a597.firebasestorage.app",
-  messagingSenderId: "910391597023",
-  appId: "1:910391597023:web:4bd49fe7762cbf93ee166a",
-  measurementId: "G-DY28CP6TK9",
+  apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
+  authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.PUBLIC_FIREBASE_APP_ID,
+  measurementId: import.meta.env.PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const firebaseClientApp =
-  activeApps.length === 0 ? initializeApp(firebaseConfig) : activeApps[0];
+let firebaseClientApp: FirebaseApp;
+
+if (!getApps().length) {
+  firebaseClientApp = initializeApp(firebaseConfig);
+} else {
+  firebaseClientApp = getApps()[0];
+}
 
 const firestore = getFirestore(firebaseClientApp);
 const auth = getAuth(firebaseClientApp);

@@ -1,4 +1,4 @@
-import { Show, type Component } from "solid-js";
+import { Show, type Component, type JSX } from "solid-js";
 
 type LoadingButtonProps = {
   loading: boolean;
@@ -6,21 +6,36 @@ type LoadingButtonProps = {
   type?: "button" | "submit";
   disabled?: boolean;
   class?: string;
-  children: string;
+  classList?: Record<string, boolean>;
+  children: JSX.Element;
+  loadingText?: string;
 };
 
 const LoadingButton: Component<LoadingButtonProps> = (props) => {
+  const baseDisabledClasses = "disabled:opacity-50 disabled:cursor-not-allowed";
+  const combinedClass = () => {
+    let classes = props.class ? `${props.class} ${baseDisabledClasses}` : baseDisabledClasses;
+    if (props.classList) {
+      for (const key in props.classList) {
+        if (Object.prototype.hasOwnProperty.call(props.classList, key) && props.classList[key]) {
+          classes += ` ${key}`;
+        }
+      }
+    }
+    return classes;
+  };
+
   return (
     <button
       type={props.type ?? "button"}
       onClick={props.onClick}
       disabled={props.disabled || props.loading}
-      class={props.class + " disabled:opacity-50 disabled:cursor-not-allowed"}
+      class={combinedClass()}
     >
       <div class="flex items-center justify-center">
         <Show when={props.loading} fallback={props.children}>
           <div class="flex items-center justify-center gap-2">
-            <span>Cargando</span>
+            <span>{props.loadingText ?? "Cargando"}</span>
             <svg
               class="animate-spin h-5 w-5 text-current"
               xmlns="http://www.w3.org/2000/svg"

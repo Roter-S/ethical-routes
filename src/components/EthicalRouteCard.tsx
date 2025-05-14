@@ -10,7 +10,6 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
   return (
     <li class="bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
       <div class="flex flex-col md:flex-row justify-between relative">
-        {/* Main content area */}
         <div class="p-4 flex-1 space-y-2">
           <div class="flex flex-col md:flex-row md:items-center gap-2">
             <a
@@ -34,8 +33,6 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
             {props.route.description}
           </p>
         </div>
-
-        {/* Date badge */}
         <div class="flex items-center justify-center bg-zinc-100 dark:bg-zinc-700/50 text-zinc-600 dark:text-zinc-300 text-sm font-medium p-4 md:min-w-[100px]">
           <div class="flex flex-col items-center">
             <span class="text-xs text-zinc-500 dark:text-zinc-400">Creado</span>

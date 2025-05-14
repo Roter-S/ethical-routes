@@ -1,5 +1,6 @@
 import { createSignal, Show } from "solid-js";
 import type { EthicalRouteTypeWithId, BranchType } from "@lib/types";
+import { DeleteDialog } from "./DeleteDialog";
 
 interface Props {
   id: string;
@@ -57,22 +58,6 @@ export default function EditEthicalRoute(props: Props) {
       window.location.replace("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al guardar");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!confirm("¿Seguro de borrar?")) return;
-
-    try {
-      const res = await fetch(`/api/ethical-routes/${props.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) {
-        throw new Error("Error al eliminar");
-      }
-      window.location.replace("/dashboard");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al eliminar");
     }
   };
 
@@ -195,13 +180,7 @@ export default function EditEthicalRoute(props: Props) {
                 >
                   Guardar Cambios
                 </button>
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  class="bg-white hover:bg-red-50 text-red-600 border border-red-300 py-2 px-4 rounded dark:bg-zinc-800 dark:border-red-700 dark:text-red-400"
-                >
-                  Eliminar
-                </button>
+                <DeleteDialog documentId={props.id} />
               </div>
             </form>
           </>

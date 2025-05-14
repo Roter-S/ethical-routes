@@ -1,33 +1,16 @@
 import { createSignal, onMount, Show } from "solid-js";
-import { z } from "zod";
+import { EthicalRouteSchema } from "@lib/ethicalRouteSchemas";
 import { firestore } from "@lib/firebase/client";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import type { BranchType } from "@lib/types";
+import type { EthicalRouteType } from "@lib/types";
 
-const BranchSchema: z.ZodType<BranchType> = z.lazy(() =>
-  z.object({
-    conclusion: z.string().optional(),
-    advice: z.string().optional(),
-    comentario_final: z.string().optional(),
-    question: z.string().optional(),
-    branches: z.record(BranchSchema).optional(),
-  })
-);
-
-const EthicalRouterSchema = z.object({
-  question: z.string(),
-  description: z.string(),
-  participations: z.number().optional().default(0),
-  branches: z.record(BranchSchema),
-});
-
-export type EthicalRouter = z.infer<typeof EthicalRouterSchema>;
+export type EthicalRouter = typeof EthicalRouteSchema._type;
 
 const EthicalRouteDropzone = () => {
   const [docId, setDocId] = createSignal<string | null>(null);
   const [isDragging, setIsDragging] = createSignal(false);
   const [file, setFile] = createSignal<File | null>(null);
-  const [jsonData, setJsonData] = createSignal<EthicalRouter | null>(null);
+  const [jsonData, setJsonData] = createSignal<Partial<EthicalRouteType> | null>(null);
   const [isValid, setIsValid] = createSignal<boolean | null>(null);
   const [error, setError] = createSignal<string | null>(null);
   const [isUploading, setIsUploading] = createSignal(false);
@@ -35,7 +18,6 @@ const EthicalRouteDropzone = () => {
   let dropzoneRef: HTMLDivElement | undefined;
   let fileInputRef: HTMLInputElement | undefined;
 
-  // Configurar los event listeners en el montaje para asegurarnos de que funcionan en Astro
   onMount(() => {
     if (dropzoneRef) {
       dropzoneRef.addEventListener("dragenter", handleDragEnter);
@@ -48,7 +30,6 @@ const EthicalRouteDropzone = () => {
     }
   });
 
-  // Manipuladores de eventos para el dropzone
   const handleDragEnter = (e: Event) => {
     e.preventDefault();
     e.stopPropagation();
@@ -77,10 +58,7 @@ const EthicalRouteDropzone = () => {
     try {
       const text = await file.text();
       const json = JSON.parse(text);
-
-      // Validar con Zod
-      const result = EthicalRouterSchema.safeParse(json);
-
+      const result = EthicalRouteSchema.safeParse(json);
       if (result.success) {
         setJsonData(result.data);
         setIsValid(true);
@@ -96,8 +74,7 @@ const EthicalRouteDropzone = () => {
     } catch (err) {
       setIsValid(false);
       setError(
-        `Error al procesar el archivo: ${
-          err instanceof Error ? err.message : String(err)
+        `Error al procesar el archivo: ${err instanceof Error ? err.message : String(err)
         }`
       );
     }
@@ -109,7 +86,6 @@ const EthicalRouteDropzone = () => {
     setIsDragging(false);
     setIsValid(null);
     setError(null);
-
     if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       const newFile = e.dataTransfer.files[0];
       setFile(newFile);
@@ -141,7 +117,6 @@ const EthicalRouteDropzone = () => {
   const uploadToFirestore = async () => {
     const data = jsonData();
     if (!data || !isValid()) return;
-
     setIsUploading(true);
     try {
       const res = await fetch("/api/ethical-routes", {
@@ -149,16 +124,13 @@ const EthicalRouteDropzone = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
-
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Error desconocido");
-
       setDocId(result.id);
       setUploadSuccess(true);
     } catch (err) {
       setError(
-        `Error al subir a API: ${
-          err instanceof Error ? err.message : String(err)
+        `Error al subir a API: ${err instanceof Error ? err.message : String(err)
         }`
       );
     } finally {
@@ -171,10 +143,9 @@ const EthicalRouteDropzone = () => {
       <div
         ref={dropzoneRef}
         class={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer mb-4 transition-colors
-          ${
-            isDragging()
-              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-              : "border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600"
+          ${isDragging()
+            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+            : "border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600"
           }`}
       >
         <input
@@ -185,7 +156,6 @@ const EthicalRouteDropzone = () => {
           accept=".json,application/json"
           onChange={handleFileSelect}
         />
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="h-12 w-12 mx-auto text-zinc-400 dark:text-zinc-500 mb-4"
@@ -200,7 +170,6 @@ const EthicalRouteDropzone = () => {
             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
           />
         </svg>
-
         <p class="text-zinc-600 dark:text-zinc-300 mb-2 text-sm">
           Arrastra y suelta tu archivo JSON aquí
         </p>
@@ -208,7 +177,6 @@ const EthicalRouteDropzone = () => {
           o haz clic para seleccionar un archivo
         </p>
       </div>
-
       <Show when={file()}>
         <div class="mb-4 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
           <h3 class="font-medium text-zinc-800 dark:text-zinc-200 mb-2 flex items-center">
@@ -228,7 +196,6 @@ const EthicalRouteDropzone = () => {
             </svg>
             {file()?.name}
           </h3>
-
           <Show when={isValid() === true}>
             <div class="text-green-600 dark:text-green-400 text-sm mb-2 flex items-center">
               <svg
@@ -290,11 +257,10 @@ const EthicalRouteDropzone = () => {
           onClick={uploadToFirestore}
           disabled={!isValid() || isUploading()}
           class={`w-full py-2 px-4 rounded-lg font-medium text-white transition-colors
-      ${
-        isValid() && !isUploading()
-          ? "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
-          : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed"
-      }`}
+      ${isValid() && !isUploading()
+              ? "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
+              : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed"
+            }`}
         >
           {isUploading() ? (
             <span class="flex items-center justify-center">
