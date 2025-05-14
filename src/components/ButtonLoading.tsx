@@ -1,4 +1,5 @@
 import { Show, type Component, type JSX } from "solid-js";
+import SpinnerIcon from "@components/icons/SpinnerIcon";
 
 type LoadingButtonProps = {
   loading: boolean;
@@ -36,20 +37,7 @@ const LoadingButton: Component<LoadingButtonProps> = (props) => {
         <Show when={props.loading} fallback={props.children}>
           <div class="flex items-center justify-center gap-2">
             <span>{props.loadingText ?? "Cargando"}</span>
-            <svg
-              class="animate-spin h-5 w-5 text-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8.009,8.009,0,0,1,12,20Z"
-              />
-              <path
-                fill="currentColor"
-                d="M10.14,2.93a10.007,10.007,0,0,1,.4.4l-.4-.4Z"
-              />
-            </svg>
+            <SpinnerIcon class="animate-spin h-5 w-5 text-current" />
           </div>
         </Show>
       </div>

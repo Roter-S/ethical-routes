@@ -1,8 +1,11 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { EthicalRouteSchema } from "@lib/ethicalRouteSchemas";
-import { firestore } from "@lib/firebase/client";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import type { EthicalRouteType } from "@lib/types";
+import UploadIcon from "@components/icons/UploadIcon";
+import DocumentIcon from "@components/icons/DocumentIcon";
+import CheckIcon from "@components/icons/CheckIcon";
+import ErrorIcon from "@components/icons/ErrorIcon";
+import SpinnerIcon from "@components/icons/SpinnerIcon";
 
 export type EthicalRouter = typeof EthicalRouteSchema._type;
 
@@ -156,20 +159,7 @@ const EthicalRouteDropzone = () => {
           accept=".json,application/json"
           onChange={handleFileSelect}
         />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-12 w-12 mx-auto text-zinc-400 dark:text-zinc-500 mb-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.5"
-            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-          />
-        </svg>
+        <UploadIcon class="h-12 w-12 mx-auto text-zinc-400 dark:text-zinc-500 mb-4" />
         <p class="text-zinc-600 dark:text-zinc-300 mb-2 text-sm">
           Arrastra y suelta tu archivo JSON aquí
         </p>
@@ -180,38 +170,12 @@ const EthicalRouteDropzone = () => {
       <Show when={file()}>
         <div class="mb-4 p-4 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
           <h3 class="font-medium text-zinc-800 dark:text-zinc-200 mb-2 flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
+            <DocumentIcon class="h-4 w-4 mr-2" />
             {file()?.name}
           </h3>
           <Show when={isValid() === true}>
             <div class="text-green-600 dark:text-green-400 text-sm mb-2 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+              <CheckIcon class="h-4 w-4 mr-1" />
               Archivo válido
             </div>
 
@@ -223,20 +187,7 @@ const EthicalRouteDropzone = () => {
 
           <Show when={isValid() === false}>
             <div class="text-red-600 dark:text-red-400 text-sm flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <ErrorIcon class="h-4 w-4 mr-1" />
               Error de validación
             </div>
             <div class="mt-1 text-xs text-red-500 dark:text-red-400">
@@ -264,26 +215,7 @@ const EthicalRouteDropzone = () => {
         >
           {isUploading() ? (
             <span class="flex items-center justify-center">
-              <svg
-                class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  class="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  stroke-width="4"
-                ></circle>
-                <path
-                  class="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
+              <SpinnerIcon class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" />
               Subiendo...
             </span>
           ) : (
