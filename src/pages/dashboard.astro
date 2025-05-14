@@ -1,37 +1,34 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import BirthdayList from "@components/EthicalRouteList";
-import { firestore } from "@lib/firebase/server";
-import type { BirthdayTypeWithId } from "@lib/types";
-import { getUser } from "@lib/utils";
-import { getDifferenceInDays } from "@lib/utils";
 import AppLayout from "@layouts/AppLayout.astro";
+import EthicalRouteList from "@components/EthicalRouteList";
+import { getUser, redirectToSignin } from "@lib/utils";
+import { firestore } from "@lib/firebase/server";
 
-/* Get session cookie */
+// Obtener cookie de sesión
 const sessionCookie = Astro.cookies.get("session")?.value ?? null;
 if (!sessionCookie) {
-  return Astro.redirect("/signin");
+  return redirectToSignin();
 }
 
-/* Verify session cookie and get user */
+// Verificar sesión y usuario
 const user = await getUser(sessionCookie);
 if (!user) {
-  return Astro.redirect("/signin");
+  return redirectToSignin();
 }
 
-const querySnashot = await firestore
-  .collection("birthdays")
-  .where("authorId", "==", user.uid)
-  .get();
-
-const documents = querySnashot.docs.map((doc) => {
-  return { documentId: doc.id, ...doc.data() };
-}) as BirthdayTypeWithId[];
-
-/* compute difference in days and sort */
-const birthdays = getDifferenceInDays(documents).sort(
-  (a, b) => a.difference - b.difference
-);
+const snapshot = await firestore.collection("ethical_routes").get();
+const routes = snapshot.docs.map((doc) => {
+  const routeData = doc.data();
+  return {
+    documentId: doc.id,
+    question: routeData.question,
+    description: routeData.description,
+    participations: routeData.participations,
+    difference: routeData.difference,
+    created_at: routeData.created_at,
+  };
+});
 ---
 
 <Layout title="Dashboard">
@@ -42,7 +39,7 @@ const birthdays = getDifferenceInDays(documents).sort(
       >
         Listado de casos éticos
       </h1>
-      <BirthdayList birthdays={birthdays} client:idle />
+      <EthicalRouteList routes={routes} />
     </main>
   </AppLayout>
 </Layout>

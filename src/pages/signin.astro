@@ -2,7 +2,6 @@
 import Layout from "@layouts/Layout.astro";
 import LoginForm from "@components/LoginForm";
 import { getUser } from "@lib/utils";
-import { Icon } from "astro-icon/components";
 
 /* Get session cookie */
 const sessionCookie = Astro.cookies.get("session")?.value ?? null;

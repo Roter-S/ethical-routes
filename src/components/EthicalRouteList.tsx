@@ -1,27 +1,26 @@
-import { For } from "solid-js";
-import { Filters } from "@components/Filters";
-import { BirthdayCard } from "@components/BirthdayCard";
-import type { BirthdayWithDifference } from "@lib/types";
-import { useFilters } from "@hooks/useFilter";
+import { For, Show } from "solid-js";
+import { EthicalRouteCard } from "./EthicalRouteCard";
+import type { EthicalRouteWithDifference } from "@lib/types";
 
-export default function EthicalRouteList({
-  birthdays,
-}: {
-  birthdays: BirthdayWithDifference[];
-}) {
-  const { birthdayCards, filters, filterBy, currentfilter } =
-    useFilters(birthdays);
+interface EthicalRouteListProps {
+  routes: EthicalRouteWithDifference[];
+}
 
+export default function EthicalRouteList(props: EthicalRouteListProps) {
   return (
-    <ul class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4">
-      <Filters
-        filters={filters ?? []}
-        filterBy={filterBy}
-        currentfilter={currentfilter}
-      />
-      <For each={birthdayCards()}>
-        {(birthday) => <BirthdayCard birthday={birthday} />}
-      </For>
-    </ul>
+    <div>
+      <Show
+        when={props.routes.length === 0}
+        fallback={
+          <ul class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4">
+            <For each={props.routes}>
+              {(route) => <EthicalRouteCard route={route} />}
+            </For>
+          </ul>
+        }
+      >
+        <p class="text-gray-500">No hay rutas éticas disponibles.</p>
+      </Show>
+    </div>
   );
 }
