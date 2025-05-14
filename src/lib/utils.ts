@@ -1,5 +1,4 @@
 import { auth, firestore } from "@lib/firebase/server";
-import { differenceInCalendarDays } from "date-fns";
 
 async function fetchUserRole(uid: string): Promise<string> {
   try {
