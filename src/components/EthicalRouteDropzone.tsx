@@ -13,7 +13,8 @@ const EthicalRouteDropzone = () => {
   const [docId, setDocId] = createSignal<string | null>(null);
   const [isDragging, setIsDragging] = createSignal(false);
   const [file, setFile] = createSignal<File | null>(null);
-  const [jsonData, setJsonData] = createSignal<Partial<EthicalRouteType> | null>(null);
+  const [jsonData, setJsonData] =
+    createSignal<Partial<EthicalRouteType> | null>(null);
   const [isValid, setIsValid] = createSignal<boolean | null>(null);
   const [error, setError] = createSignal<string | null>(null);
   const [isUploading, setIsUploading] = createSignal(false);
@@ -77,7 +78,8 @@ const EthicalRouteDropzone = () => {
     } catch (err) {
       setIsValid(false);
       setError(
-        `Error al procesar el archivo: ${err instanceof Error ? err.message : String(err)
+        `Error al procesar el archivo: ${
+          err instanceof Error ? err.message : String(err)
         }`
       );
     }
@@ -133,7 +135,8 @@ const EthicalRouteDropzone = () => {
       setUploadSuccess(true);
     } catch (err) {
       setError(
-        `Error al subir a API: ${err instanceof Error ? err.message : String(err)
+        `Error al subir a API: ${
+          err instanceof Error ? err.message : String(err)
         }`
       );
     } finally {
@@ -146,9 +149,10 @@ const EthicalRouteDropzone = () => {
       <div
         ref={dropzoneRef}
         class={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer mb-4 transition-colors
-          ${isDragging()
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-            : "border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600"
+          ${
+            isDragging()
+              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+              : "border-zinc-300 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600"
           }`}
       >
         <input
@@ -208,9 +212,11 @@ const EthicalRouteDropzone = () => {
           onClick={uploadToFirestore}
           disabled={!isValid() || isUploading()}
           class={`w-full py-2 px-4 rounded-md font-medium text-sm flex items-center justify-center transition-colors duration-150
-            ${isValid() && !isUploading()
-              ? "bg-blue-600 hover:bg-blue-700 border border-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white"
-              : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed text-white border border-zinc-400 dark:border-zinc-700"}
+            ${
+              isValid() && !isUploading()
+                ? "bg-blue-600 hover:bg-blue-700 border border-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white"
+                : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed text-white border border-zinc-400 dark:border-zinc-700"
+            }
           `}
         >
           {isUploading() ? (
@@ -219,7 +225,7 @@ const EthicalRouteDropzone = () => {
               Subiendo...
             </span>
           ) : (
-            "Subir a Firestore"
+            "Crear"
           )}
         </button>
       </Show>

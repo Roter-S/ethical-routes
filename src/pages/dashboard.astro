@@ -49,15 +49,47 @@ try {
       <h1
         class="text-xl sm:text-3xl max-w-xl dark:text-zinc-100 w-full text-zinc-900 font-semibold mt-10 mb-6"
       >
-        Listado de casos éticos
+        Mis casos éticos
       </h1>
+      <div class="w-full max-w-xl mb-6">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar mis casos éticos..."
+          class="w-full px-4 py-2 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       {
         errorLoadingRoutes ? (
           <p class="text-red-500 dark:text-red-400">{errorLoadingRoutes}</p>
         ) : (
-          <EthicalRouteList routes={routes} />
+          <div id="routesList" class="w-full max-w-xl">
+            <EthicalRouteList routes={routes} />
+          </div>
         )
       }
     </main>
   </AppLayout>
 </Layout>
+
+<script>
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const routesList = document.getElementById('routesList');
+  const routeCards = routesList?.getElementsByTagName('li');
+
+  if (searchInput && routeCards) {
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = (e.target as HTMLInputElement).value.toLowerCase().trim();
+      
+      Array.from(routeCards).forEach((card) => {
+        const question = card.querySelector('[data-question]')?.getAttribute('data-question')?.toLowerCase() || '';
+        const description = card.querySelector('[data-description]')?.getAttribute('data-description')?.toLowerCase() || '';
+        
+        const matches = question.includes(searchTerm) || 
+                       description.includes(searchTerm);
+        
+        card.style.display = matches ? '' : 'none';
+      });
+    });
+  }
+</script>

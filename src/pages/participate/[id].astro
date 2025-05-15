@@ -11,76 +11,73 @@ let routeData: EthicalRouteTypeWithId | null = null;
 let errorPage: Response | null = null;
 
 if (!id) {
-    errorPage = Astro.redirect("/all");
+  errorPage = Astro.redirect("/all");
 }
 
 if (!errorPage && id) {
-    try {
-        const routeDoc = await firestore
-            .collection("ethical_routes")
-            .doc(id)
-            .get();
-        if (!routeDoc.exists) {
-            errorPage = Astro.redirect("/404");
-        } else {
-            const data = routeDoc.data();
-            routeData = {
-                documentId: routeDoc.id,
-                question: data?.question || "Pregunta no disponible",
-                description: data?.description || "Descripción no disponible",
-                participations: data?.participations || 0,
-                created_at: data?.created_at || new Date(),
-                difference: data?.difference,
-                branches: data?.branches,
-            } as EthicalRouteTypeWithId & { branches?: Record<string, any> };
-        }
-    } catch (error) {
-        console.error(`Error fetching ethical route with ID ${id}:`, error);
-        errorPage = Astro.redirect("/404");
+  try {
+    const routeDoc = await firestore.collection("ethical_routes").doc(id).get();
+    if (!routeDoc.exists) {
+      errorPage = Astro.redirect("/404");
+    } else {
+      const data = routeDoc.data();
+      routeData = {
+        documentId: routeDoc.id,
+        question: data?.question || "Pregunta no disponible",
+        description: data?.description || "Descripción no disponible",
+        participations: data?.participations || 0,
+        created_at: data?.created_at || new Date(),
+        difference: data?.difference,
+        branches: data?.branches,
+      } as EthicalRouteTypeWithId & { branches?: Record<string, any> };
     }
+  } catch (error) {
+    console.error(`Error fetching ethical route with ID ${id}:`, error);
+    errorPage = Astro.redirect("/404");
+  }
 }
 
 if (errorPage) {
-    return errorPage;
+  return errorPage;
 }
 ---
 
 <Layout title={`Participar: ${routeData?.question ?? ""} - Rutas Éticas`}>
-    <AppLayout>
-        <main class="w-full mx-auto max-w-3xl mt-10 flex flex-col items-center">
-            <div class="w-full flex flex-col">
-                <a
-                    href="/all/"
-                    class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
-                >
-                    <ArrowLeftIcon class="w-4 h-4" />
-                    Volver a todas las rutas
-                </a>
-                <h1
-                    class="font-semibold sm:text-2xl text-xl dark:text-zinc-100 text-zinc-900 w-full mb-4"
-                >
-                    {routeData?.question}
-                </h1>
-                <p class="text-zinc-600 dark:text-zinc-300 mb-6">
-                    {routeData?.description}
-                </p>
-                <div
-                    class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-8 text-blue-800 dark:text-blue-200 text-sm"
-                >
-                    <strong>Instrucciones:</strong> Responde las preguntas de la
-                    ruta ética según tu situación real. Al final recibirás una conclusión
-                    y recomendaciones personalizadas.
-                </div>
-                <a
-                    href={`/participate/${id}/start`}
-                    class="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 hover:brightness-110 hover:opacity-95 text-white font-semibold px-8 py-3 rounded-lg text-lg transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-400 mt-2 group"
-                >
-                    Iniciar recorrido
-                    <ArrowRightIcon
-                        class="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                    />
-                </a>
-            </div>
-        </main>
-    </AppLayout>
+  <AppLayout>
+    <main class="w-full mx-auto max-w-3xl mt-10 flex flex-col items-center">
+      <div class="w-full flex flex-col">
+        <a
+          href="/community/"
+          class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
+        >
+          <ArrowLeftIcon class="w-4 h-4" />
+          Volver a comunidad
+        </a>
+        <h1
+          class="font-semibold sm:text-2xl text-xl dark:text-zinc-100 text-zinc-900 w-full mb-4"
+        >
+          {routeData?.question}
+        </h1>
+        <p class="text-zinc-600 dark:text-zinc-300 mb-6">
+          {routeData?.description}
+        </p>
+        <div
+          class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-8 text-blue-800 dark:text-blue-200 text-sm"
+        >
+          <strong>Instrucciones:</strong> Responde las preguntas de la ruta ética
+          según tu situación real. Al final recibirás una conclusión y recomendaciones
+          personalizadas.
+        </div>
+        <a
+          href={`/participate/${id}/start`}
+          class="inline-flex items-center gap-2 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-700 hover:to-blue-700 hover:brightness-110 hover:opacity-95 text-white font-semibold px-8 py-3 rounded-lg text-lg transition-all shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-400 mt-2 group"
+        >
+          Iniciar recorrido
+          <ArrowRightIcon
+            class="w-5 h-5 group-hover:translate-x-1 transition-transform"
+          />
+        </a>
+      </div>
+    </main>
+  </AppLayout>
 </Layout>

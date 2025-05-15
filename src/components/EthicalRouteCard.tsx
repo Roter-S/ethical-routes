@@ -26,7 +26,7 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
               }
               class="text-zinc-800 dark:text-white text-lg font-medium group inline-flex items-center transition-colors duration-200"
             >
-              <span class="relative overflow-hidden">
+              <span class="relative overflow-hidden" data-question={props.route.question}>
                 {props.route.question}
                 <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-500 dark:bg-blue-400 group-hover:w-full transition-all duration-300"></span>
               </span>
@@ -39,7 +39,7 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
             </Show>
           </div>
 
-          <p class="text-sm text-zinc-600 dark:text-zinc-300 mb-1">
+          <p class="text-sm text-zinc-600 dark:text-zinc-300 mb-1" data-description={props.route.description}>
             {props.route.description}
           </p>
           <Show when={props.showCreator && props.route.creator}>
@@ -55,7 +55,7 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
                   {props.route.creatorInitials}
                 </span>
               )}
-              <span class="text-xs text-zinc-500 dark:text-zinc-400">
+              <span class="text-xs text-zinc-500 dark:text-zinc-400" data-creator={props.route.creator}>
                 <span class="font-semibold">Creado por:</span>{" "}
                 {props.route.creator}
               </span>

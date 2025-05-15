@@ -158,7 +158,7 @@ export default function LoginForm() {
           type="button"
         >
           <GoogleIcon class="h-5 w-auto" />
-          <span>Inicie sesión con Google</span>
+          <span>Continuar con Google</span>
         </button>
       </div>
       <Suspense>
