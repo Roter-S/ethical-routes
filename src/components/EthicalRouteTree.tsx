@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createMemo, createSignal } from "solid-js";
 
 interface BranchNode {
   question?: string;
@@ -21,6 +21,16 @@ interface Step {
   answer: string;
 }
 
+function getMaxDepth(node: BranchNode, depth = 0): number {
+  if (!node.branches) return depth + 1;
+  return (
+    1 +
+    Math.max(
+      ...Object.values(node.branches).map((child) => getMaxDepth(child, 0))
+    )
+  );
+}
+
 export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
   const [currentNode, setCurrentNode] = createSignal<BranchNode>({
     question: props.tree.question,
@@ -30,11 +40,17 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
   const [finished, setFinished] = createSignal(false);
   const [result, setResult] = createSignal<BranchNode | null>(null);
 
+  const remainingSteps = createMemo(() => getMaxDepth(currentNode()));
+  const totalSteps = createMemo(() => history().length + remainingSteps());
+  const progress = createMemo(
+    () => Math.min(100, (history().length / totalSteps()) * 100)
+  );
+
   function handleOption(optionKey: string) {
     const node = currentNode();
     if (!node.branches) return;
     const nextNode = node.branches[optionKey];
-    setHistory([...history(), { question: node.question || "", answer: optionKey }]);
+    setHistory((prev) => [...prev, { question: node.question || "", answer: optionKey }]);
     if (nextNode.conclusion) {
       setResult(nextNode);
       setFinished(true);
@@ -49,10 +65,6 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
     setFinished(false);
     setResult(null);
   }
-
-
-  const maxSteps = 6;
-  const progress = Math.min(100, ((history().length + (finished() ? 1 : 0)) / maxSteps) * 100);
 
   createEffect(() => {
     if (finished()) {
@@ -69,16 +81,16 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
 
   return (
     <div class="w-full flex flex-col items-center">
-      {history().length > 0 && !finished() && (
+      {!finished() && (
         <div class="mb-4 w-full flex items-center gap-2">
           <div class="flex-1 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
             <div
               class="h-full bg-gradient-to-r from-violet-500 to-blue-500 transition-all"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${progress()}%` }}
             />
           </div>
           <span class="text-xs text-zinc-500 dark:text-zinc-300">
-            Paso {history().length + 1}
+            Paso {history().length + 1} de {totalSteps()}
           </span>
         </div>
       )}
@@ -154,7 +166,7 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
           <div class="relative w-full max-w-md">
             {history().map((step, idx) => (
               <div class="flex items-center relative" style={{ "min-height": "48px" }}>
-                {idx !== 0 && (
+                {idx < history().length - 0 && (
                   <div class="absolute left-5 top-0 h-full w-px bg-violet-300 dark:bg-violet-700" style={{ "z-index": 0 }} />
                 )}
                 <div class="z-10 flex flex-col items-center">

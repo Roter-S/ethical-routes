@@ -26,35 +26,38 @@ try {
     .orderBy("created_at", "desc")
     .get();
   routes = snapshot.docs.map((doc) => {
-  const routeData = doc.data();
-  return {
-    documentId: doc.id,
+    const routeData = doc.data();
+    return {
+      documentId: doc.id,
       question: routeData.question || "Pregunta no disponible",
       description: routeData.description || "Descripción no disponible",
       participations: routeData.participations || 0,
       difference: routeData.difference || 0,
-    created_at: routeData.created_at,
+      created_at: routeData.created_at,
     } as EthicalRouteWithDifference;
-});
+  });
 } catch (error) {
   console.error("Error fetching ethical routes:", error);
-  errorLoadingRoutes = "No se pudieron cargar los casos éticos. Inténtalo de nuevo más tarde.";
+  errorLoadingRoutes =
+    "No se pudieron cargar los casos éticos. Inténtalo de nuevo más tarde.";
 }
 ---
 
 <Layout title="Dashboard - Rutas Éticas">
   <AppLayout>
-    <main class="w-full grow flex flex-col items-center px-4">
+    <main class="w-full grow flex flex-col items-center">
       <h1
         class="text-xl sm:text-3xl max-w-xl dark:text-zinc-100 w-full text-zinc-900 font-semibold mt-10 mb-6"
       >
         Listado de casos éticos
       </h1>
-      {errorLoadingRoutes ? (
-        <p class="text-red-500 dark:text-red-400">{errorLoadingRoutes}</p>
-      ) : (
-      <EthicalRouteList routes={routes} />
-      )}
+      {
+        errorLoadingRoutes ? (
+          <p class="text-red-500 dark:text-red-400">{errorLoadingRoutes}</p>
+        ) : (
+          <EthicalRouteList routes={routes} />
+        )
+      }
     </main>
   </AppLayout>
 </Layout>

@@ -3,43 +3,78 @@ import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout title="Inicio - Rutas Éticas">
-  <main class="relative py-5">
-    <div class="relative">
-      <div class="flex items-center justify-center -space-x-2">
+  <main class="relative py-4 sm:py-6 md:py-8">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-center -space-x-2">
         <img
           loading="lazy"
-          width="200"
-          height="200"
+          width="160"
+          height="160"
           src="/images/logo.svg"
           alt="Logo de Rutas Éticas"
-          class="rounded-full object-cover"
+          class="rounded-full object-cover w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48"
         />
       </div>
-      <div class="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
+      <div
+        class="mt-4 sm:mt-6 md:mt-8 space-y-4 sm:space-y-6 max-w-4xl mx-auto"
+      >
         <h1
-          class="text-center text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-cyan-400 md:text-5xl drop-shadow-lg mb-4"
+          class="text-center text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-600 dark:from-primary dark:to-cyan-400 drop-shadow-lg mb-3 sm:mb-4"
         >
           Rutas Éticas
         </h1>
         <div>
-          <p class="prose prose-lg mx-auto dark:prose-invert text-justify leading-relaxed">
-            <span class="block text-xl font-semibold text-primary dark:text-cyan-400 mb-2">¡Bienvenido!</span>
-            Este sistema interactivo presenta una serie de casos relacionados
-            con la <span class="font-bold text-blue-700 dark:text-cyan-300">ciberseguridad</span>, diseñados para explorar dilemas éticos reales
-            que pueden surgir en la práctica profesional.<br />
-            <span class="font-semibold text-primary">Los usuarios deberán tomar decisiones</span> en cada etapa del caso, enfrentándose
-            a situaciones donde los valores éticos y los intereses tecnológicos pueden
-            entrar en conflicto.<br />
-            A medida que se avanza en el caso, el sistema construye un <span class="font-bold text-blue-700 dark:text-cyan-300">árbol de decisiones</span>
-            que refleja las elecciones realizadas, permitiendo visualizar cómo cada
-            decisión impacta en el desarrollo del dilema.<br />
-            Al finalizar, se genera una <span class="font-semibold text-primary">reflexión personalizada</span> basada en el camino
-            tomado, junto con un consejo ético que invita a cuestionar la ruta elegida
-            y considerar otras perspectivas.<br />
-            <span class="italic text-gray-700 dark:text-gray-300">Este enfoque no solo promueve la toma de decisiones informada, sino que
-            también fortalece la conciencia ética en contextos críticos de la seguridad
-            informática.</span>
-          </p>
+          <div
+            class="prose prose-sm sm:prose-base md:prose-lg dark:prose-invert mx-auto text-justify leading-relaxed px-2 sm:px-0"
+          >
+            <p class="mb-4">
+              <span
+                class="text-lg sm:text-xl font-semibold text-primary dark:text-cyan-400 block mb-2"
+              >
+                ¡Bienvenido!
+              </span>
+              Este sistema interactivo presenta una serie de casos relacionados con
+              la
+              <span class="font-bold text-blue-700 dark:text-cyan-300"
+                >ciberseguridad</span
+              >, diseñados para explorar dilemas éticos reales que pueden surgir
+              en la práctica profesional.
+            </p>
+
+            <p class="mb-4">
+              <span class="font-semibold text-primary"
+                >Los usuarios deberán tomar decisiones</span
+              >
+              en cada etapa del caso, enfrentándose a situaciones donde los valores
+              éticos y los intereses tecnológicos pueden entrar en conflicto.
+            </p>
+
+            <p class="mb-4">
+              A medida que se avanza en el caso, el sistema construye un
+              <span class="font-bold text-blue-700 dark:text-cyan-300"
+                >árbol de decisiones</span
+              >
+              que refleja las elecciones realizadas, permitiendo visualizar cómo
+              cada decisión impacta en el desarrollo del dilema.
+            </p>
+
+            <p class="mb-4">
+              Al finalizar, se genera una
+              <span class="font-semibold text-primary"
+                >reflexión personalizada</span
+              >
+              basada en el camino tomado, junto con un consejo ético que invita a
+              cuestionar la ruta elegida y considerar otras perspectivas.
+            </p>
+
+            <p
+              class="italic text-gray-700 dark:text-gray-300 text-sm sm:text-base"
+            >
+              Este enfoque no solo promueve la toma de decisiones informada,
+              sino que también fortalece la conciencia ética en contextos
+              críticos de la seguridad informática.
+            </p>
+          </div>
         </div>
 
         <div class="flex flex-wrap justify-center gap-6 mt-20">

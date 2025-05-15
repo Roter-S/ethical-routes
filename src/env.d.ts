@@ -17,16 +17,16 @@ interface ImportMeta {
 }
 
 declare namespace App {
-    interface Locals {
-        user?: {
-            uid: string;
-            email?: string | null;
-            displayName?: string | null;
-            photoURL?: string | null;
-            emailVerified: boolean;
-            isAdmin: boolean;
-            // Agrega aquí cualquier otra propiedad que devuelva tu función getUser
-        };
-        // puedes añadir otras propiedades a locals si las necesitas
-    }
+  interface Locals {
+    user?: {
+      uid: string;
+      email?: string | null;
+      displayName?: string | null;
+      photoURL?: string | null;
+      emailVerified: boolean;
+      isAdmin: boolean;
+      // Agrega aquí cualquier otra propiedad que devuelva tu función getUser
+    };
+    // puedes añadir otras propiedades a locals si las necesitas
+  }
 }

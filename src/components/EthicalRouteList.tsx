@@ -12,7 +12,9 @@ export default function EthicalRouteList({ routes }: EthicalRouteListProps) {
       when={routes.length === 0}
       fallback={
         <ul class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4">
-          <For each={routes}>{(route) => <EthicalRouteCard route={route} />}</For>
+          <For each={routes}>
+            {(route) => <EthicalRouteCard route={route} />}
+          </For>
         </ul>
       }
     >
