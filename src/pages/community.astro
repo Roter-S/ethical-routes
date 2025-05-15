@@ -26,7 +26,6 @@ try {
     snapshot.docs.map(async (doc) => {
       const routeData = doc.data();
       let creator = null;
-      let creatorPhoto = null;
       let creatorInitials = "?";
       if (routeData.created_by) {
         const userDoc = await firestore
@@ -38,9 +37,8 @@ try {
           userDoc.exists && userData
             ? userData.name || userData.email || routeData.created_by
             : routeData.created_by;
-        creatorPhoto = userData?.photoURL || null;
         creatorInitials = getInitials(
-          userData?.name || userData?.email || routeData.created_by
+          userData?.name || userData?.email || routeData.created_by,
         );
       }
       return {
@@ -51,14 +49,13 @@ try {
         difference: routeData.difference || 0,
         created_at: routeData.created_at,
         creator,
-        creatorPhoto,
         creatorInitials,
       } as EthicalRouteWithDifference & {
         creator?: string;
         creatorPhoto?: string | null;
         creatorInitials?: string;
       };
-    })
+    }),
   );
   routes.sort((a, b) => (b.participations ?? 0) - (a.participations ?? 0));
 } catch (error) {
@@ -97,7 +94,10 @@ try {
         errorLoadingRoutes ? (
           <p class="text-red-500 dark:text-red-400">{errorLoadingRoutes}</p>
         ) : (
-          <ul id="routesList" class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4">
+          <ul
+            id="routesList"
+            class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4"
+          >
             {routes.map((route) => (
               <EthicalRouteCard route={route} showCreator linkToParticipate />
             ))}
@@ -109,24 +109,41 @@ try {
 </Layout>
 
 <script>
-  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
-  const routesList = document.getElementById('routesList');
-  const routeCards = routesList?.getElementsByTagName('li');
+  const searchInput = document.getElementById(
+    "searchInput",
+  ) as HTMLInputElement;
+  const routesList = document.getElementById("routesList");
+  const routeCards = routesList?.getElementsByTagName("li");
 
   if (searchInput && routeCards) {
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = (e.target as HTMLInputElement).value.toLowerCase().trim();
-      
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = (e.target as HTMLInputElement).value
+        .toLowerCase()
+        .trim();
+
       Array.from(routeCards).forEach((card) => {
-        const question = card.querySelector('[data-question]')?.getAttribute('data-question')?.toLowerCase() || '';
-        const description = card.querySelector('[data-description]')?.getAttribute('data-description')?.toLowerCase() || '';
-        const creator = card.querySelector('[data-creator]')?.getAttribute('data-creator')?.toLowerCase() || '';
-        
-        const matches = question.includes(searchTerm) || 
-                       description.includes(searchTerm) || 
-                       creator.includes(searchTerm);
-        
-        card.style.display = matches ? '' : 'none';
+        const question =
+          card
+            .querySelector("[data-question]")
+            ?.getAttribute("data-question")
+            ?.toLowerCase() || "";
+        const description =
+          card
+            .querySelector("[data-description]")
+            ?.getAttribute("data-description")
+            ?.toLowerCase() || "";
+        const creator =
+          card
+            .querySelector("[data-creator]")
+            ?.getAttribute("data-creator")
+            ?.toLowerCase() || "";
+
+        const matches =
+          question.includes(searchTerm) ||
+          description.includes(searchTerm) ||
+          creator.includes(searchTerm);
+
+        card.style.display = matches ? "" : "none";
       });
     });
   }

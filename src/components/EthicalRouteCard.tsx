@@ -5,7 +5,6 @@ import { Show } from "solid-js";
 interface EthicalRouteCardProps {
   route: EthicalRouteWithDifference & {
     creator?: string;
-    creatorPhoto?: string | null;
     creatorInitials?: string;
   };
   showCreator?: boolean;
@@ -44,17 +43,9 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
           </p>
           <Show when={props.showCreator && props.route.creator}>
             <div class="flex items-center gap-2 mt-2">
-              {props.route.creatorPhoto ? (
-                <img
-                  src={props.route.creatorPhoto}
-                  alt={props.route.creator}
-                  class="w-7 h-7 rounded-full object-cover border border-zinc-300 dark:border-zinc-700"
-                />
-              ) : (
-                <span class="w-7 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-700 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700">
-                  {props.route.creatorInitials}
-                </span>
-              )}
+              <span class="w-7 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-700 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700">
+                {props.route.creatorInitials}
+              </span>
               <span class="text-xs text-zinc-500 dark:text-zinc-400" data-creator={props.route.creator}>
                 <span class="font-semibold">Creado por:</span>{" "}
                 {props.route.creator}
