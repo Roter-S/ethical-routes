@@ -3,7 +3,9 @@ import { formatDate } from "@lib/utils";
 import { Show } from "solid-js";
 
 interface EthicalRouteCardProps {
-  route: EthicalRouteWithDifference;
+  route: EthicalRouteWithDifference & { creator?: string, creatorPhoto?: string | null, creatorInitials?: string };
+  showCreator?: boolean;
+  linkToParticipate?: boolean;
 }
 
 export function EthicalRouteCard(props: EthicalRouteCardProps) {
@@ -13,7 +15,7 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
         <div class="p-4 flex-1 space-y-2">
           <div class="flex flex-col md:flex-row md:items-center gap-2">
             <a
-              href={`/edit/${props.route.documentId}`}
+              href={props.linkToParticipate ? `/participate/${props.route.documentId}` : `/edit/${props.route.documentId}`}
               class="text-zinc-800 dark:text-white text-lg font-medium group inline-flex items-center transition-colors duration-200"
             >
               <span class="relative overflow-hidden">
@@ -32,6 +34,20 @@ export function EthicalRouteCard(props: EthicalRouteCardProps) {
           <p class="text-sm text-zinc-600 dark:text-zinc-300 mb-1">
             {props.route.description}
           </p>
+          <Show when={props.showCreator && props.route.creator}>
+            <div class="flex items-center gap-2 mt-2">
+              {props.route.creatorPhoto ? (
+                <img src={props.route.creatorPhoto} alt={props.route.creator} class="w-7 h-7 rounded-full object-cover border border-zinc-300 dark:border-zinc-700" />
+              ) : (
+                <span class="w-7 h-7 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-700 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700">
+                  {props.route.creatorInitials}
+                </span>
+              )}
+              <span class="text-xs text-zinc-500 dark:text-zinc-400">
+                <span class="font-semibold">Creado por:</span> {props.route.creator}
+              </span>
+            </div>
+          </Show>
         </div>
         <div class="flex items-center justify-center bg-zinc-100 dark:bg-zinc-700/50 text-zinc-600 dark:text-zinc-300 text-sm font-medium p-4 md:min-w-[100px]">
           <div class="flex flex-col items-center">

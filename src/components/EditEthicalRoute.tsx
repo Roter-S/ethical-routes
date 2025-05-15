@@ -1,6 +1,7 @@
 import { createSignal, Show } from "solid-js";
 import type { EthicalRouteTypeWithId, BranchType } from "@lib/types";
 import { DeleteDialog } from "./DeleteDialog";
+import ButtonLoading from "./ButtonLoading";
 
 interface Props {
   id: string;
@@ -13,6 +14,7 @@ export default function EditEthicalRoute(props: Props) {
   const [routeData, setRouteData] = createSignal(props.initialData);
   const [isLoading, setIsLoading] = createSignal(!props.initialData);
   const [error, setError] = createSignal<string | null>(null);
+  const [isSaving, setIsSaving] = createSignal(false);
 
   if (!props.initialData) {
     fetchRouteData();
@@ -36,6 +38,7 @@ export default function EditEthicalRoute(props: Props) {
 
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     const form = e.currentTarget as HTMLFormElement;
     const fd = new FormData(form);
 
@@ -46,7 +49,6 @@ export default function EditEthicalRoute(props: Props) {
         body: JSON.stringify({
           question: fd.get("question"),
           description: fd.get("description"),
-          participations: Number(fd.get("participations")),
           branches: JSON.parse(fd.get("branches") as string),
         }),
       });
@@ -58,6 +60,8 @@ export default function EditEthicalRoute(props: Props) {
       window.location.replace("/dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al guardar");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -77,27 +81,6 @@ export default function EditEthicalRoute(props: Props) {
       >
         {(data) => (
           <>
-            <a
-              href="/dashboard/"
-              class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-4 h-4"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"
-                />
-              </svg>
-              Volver al dashboard
-            </a>
-
             <h1 class="font-semibold sm:text-2xl text-xl dark:text-zinc-100 text-zinc-900 w-full mb-4">
               Editar Caso Ético
             </h1>
@@ -143,22 +126,6 @@ export default function EditEthicalRoute(props: Props) {
 
               <div>
                 <label
-                  for="participations"
-                  class="block mb-2 font-medium text-zinc-600 dark:text-zinc-300"
-                >
-                  Participaciones
-                </label>
-                <input
-                  type="number"
-                  name="participations"
-                  id="participations"
-                  value={data().participations || 0}
-                  class="w-full p-2 border rounded text-zinc-600 dark:text-zinc-300"
-                />
-              </div>
-
-              <div>
-                <label
                   for="branches"
                   class="block mb-2 font-medium text-zinc-600 dark:text-zinc-300"
                 >
@@ -174,13 +141,15 @@ export default function EditEthicalRoute(props: Props) {
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 mt-4">
-                <button
+                <ButtonLoading
                   type="submit"
-                  class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                  loading={isSaving()}
+                  class="flex gap-1 text-violet-600 hover:text-violet-700 border border-violet-200 dark:border-violet-800 dark:hover:border-violet-500 dark:hover:text-white hover:border-violet-300 dark:text-violet-200 dark:bg-violet-800 dark:hover:bg-violet-700 bg-violet-200 px-3 py-2 rounded-md font-medium text-sm items-center justify-center transition-colors duration-150"
+                  loadingText="Guardando..."
                 >
                   Guardar Cambios
-                </button>
-                <DeleteDialog documentId={props.id} />
+                </ButtonLoading>
+                <DeleteDialog documentId={props.id} buttonClass="flex gap-1 text-red-600 hover:text-red-700 border border-red-200 dark:border-red-800 dark:hover:border-red-500 dark:hover:text-white hover:border-red-300 dark:text-red-200 dark:bg-red-800 dark:hover:bg-red-700 bg-red-200 px-3 py-2 rounded-md font-medium text-sm items-center justify-center transition-colors duration-150" />
               </div>
             </form>
           </>

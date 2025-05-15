@@ -10,6 +10,7 @@ import type { z } from "zod";
 import { registerSchema } from "@lib/schemas";
 import { ErrorPlaceholder } from "@components/ErrorPlaceholder";
 import { Error } from "@components/Error";
+import ButtonLoading from "./ButtonLoading";
 
 type Errors = z.typeToFlattenedError<
   z.inferFormattedError<typeof registerSchema>
@@ -120,29 +121,14 @@ export default function SignupForm() {
           <Error message={clientErrors()?.fieldErrors.confirmPassword} />
         </Show>
       </div>
-      <button
+      <ButtonLoading
         class="bg-zinc-100 py-1.5 border border-zinc-100 rounded-md mt-2 text-black font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-600 focus:ring-offset-zinc-900"
         type="submit"
-        disabled={response.loading}
+        loading={response.loading}
+        loadingText="Registrando..."
       >
-        <Show fallback="Registrarse" when={response.loading}>
-          <svg
-            class="animate-spin h-5 w-5 text-white mx-auto"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8.009,8.009,0,0,1,12,20Z"
-            />
-            <path
-              fill="currentColor"
-              d="M10.14,2.93a10.007,10.007,0,0,1,.4.4l-.4-.4Z"
-            />
-          </svg>
-          <span class="ml-2">Cargando...</span>
-        </Show>
-      </button>
+        Registrarse
+      </ButtonLoading>
       <Suspense>
         <Switch>
           <Match when={response()?.error === "auth/email-already-exists"}>

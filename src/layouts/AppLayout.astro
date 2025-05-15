@@ -1,46 +1,41 @@
 ---
 import SignoutButton from "@components/SignoutButton";
+import AddIcon from "@components/icons/AddIcon";
 const user = Astro.locals.user;
 ---
 
 <nav class="dark:bg-zinc-950 bg-zinc-50 border-b dark:border-zinc-800">
   <div class="p-4 flex justify-between items-center max-w-4xl mx-auto">
-    <a
+    <div
       class="text-lg font-semibold text-zinc-900 hover:text-violet-800 dark:hover:text-white dark:text-zinc-100 flex gap-2 items-center"
-      href="/dashboard/"
     >
       <img
         loading="lazy"
         width="60"
-        src="/images/logo-background.webp"
+        src="/images/logo.webp"
         alt="member photo"
         class="rounded-full object-cover"
       />
       Rutas éticas
-    </a>
+    </div>
     <div class="flex gap-3 items-center">
       {
-        user && user.isAdmin && (
-          <a
-            class="flex gap-1 text-violet-600 hover:text-violet-700 border border-violet-200 dark:border-violet-800 dark:hover:border-violet-500 dark:hover:text-white hover:border-violet-300 dark:text-violet-200 dark:bg-violet-800 dark:hover:bg-violet-700 bg-violet-200 px-3 py-1 rounded-md font-medium"
-            href="/add/"
-          >
-            <span>Nuevo</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
+        user && !user.isAdmin && (
+          <>
+            <a
+              class="flex gap-1 text-violet-600 hover:text-violet-700 border border-violet-200 dark:border-violet-800 dark:hover:border-violet-500 dark:hover:text-white hover:border-violet-300 dark:text-violet-200 dark:bg-violet-800 dark:hover:bg-violet-700 bg-violet-200 px-3 py-1 rounded-md font-medium"
+              href="/add/"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </a>
+              <span>Nuevo</span>
+              <AddIcon class="w-6 h-6" />
+            </a>
+            <a
+              class="flex gap-1 text-blue-600 hover:text-blue-700 border border-blue-200 dark:border-blue-800 dark:hover:border-blue-500 dark:hover:text-white hover:border-blue-300 dark:text-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700 bg-blue-200 px-3 py-1 rounded-md font-medium"
+              href="/all/"
+            >
+              <span>Ver todos</span>
+            </a>
+          </>
         )
       }
       <SignoutButton client:idle />

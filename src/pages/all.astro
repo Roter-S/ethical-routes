@@ -1,0 +1,93 @@
+---
+import Layout from "@layouts/Layout.astro";
+import AppLayout from "@layouts/AppLayout.astro";
+import { firestore } from "@lib/firebase/server";
+import { EthicalRouteCard } from "@components/EthicalRouteCard";
+import ArrowLeftIcon from "@components/icons/ArrowLeftIcon";
+import type { EthicalRouteWithDifference } from "@lib/types";
+
+let routes: (EthicalRouteWithDifference & { creator?: string, creatorPhoto?: string | null, creatorInitials?: string })[] = [];
+let errorLoadingRoutes: string | null = null;
+
+function getInitials(nameOrEmail: string): string {
+  if (!nameOrEmail) return "?";
+  const parts = nameOrEmail.split(/\s+|@/);
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + (parts[1][0] || "")).toUpperCase();
+}
+
+try {
+    const snapshot = await firestore.collection("ethical_routes").get();
+    routes = await Promise.all(
+        snapshot.docs.map(async (doc) => {
+            const routeData = doc.data();
+            let creator = null;
+            let creatorPhoto = null;
+            let creatorInitials = "?";
+            if (routeData.created_by) {
+                const userDoc = await firestore
+                    .collection("users")
+                    .doc(routeData.created_by)
+                    .get();
+                const userData = userDoc.data();
+                creator = userDoc.exists && userData
+                    ? userData.name || userData.email || routeData.created_by
+                    : routeData.created_by;
+                creatorPhoto = userData?.photoURL || null;
+                creatorInitials = getInitials(userData?.name || userData?.email || routeData.created_by);
+            }
+            return {
+                documentId: doc.id,
+                question: routeData.question || "Pregunta no disponible",
+                description:
+                    routeData.description || "Descripción no disponible",
+                participations: routeData.participations || 0,
+                difference: routeData.difference || 0,
+                created_at: routeData.created_at,
+                creator,
+                creatorPhoto,
+                creatorInitials,
+            } as EthicalRouteWithDifference & { creator?: string, creatorPhoto?: string | null, creatorInitials?: string };
+        }),
+    );
+    routes.sort((a, b) => (b.participations ?? 0) - (a.participations ?? 0));
+} catch (error) {
+    console.error("Error fetching ethical routes:", error);
+    errorLoadingRoutes =
+        "No se pudieron cargar los casos éticos. Inténtalo de nuevo más tarde.";
+}
+---
+
+<Layout title="Todas las rutas éticas - Rutas Éticas">
+    <AppLayout>
+        <main class="w-full mx-auto max-w-3xl mt-10 flex flex-col items-center">
+            <div class="w-full flex flex-col">
+                <a
+                    href="/dashboard/"
+                    class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
+                >
+                    <ArrowLeftIcon class="w-4 h-4" />
+                    Regresar al Dashboard
+                </a>
+                <h1
+                    class="font-semibold sm:text-2xl text-xl dark:text-zinc-100 text-zinc-900 w-full mb-4"
+                >
+                    Todas las rutas éticas
+                </h1>
+            </div>
+            {
+                errorLoadingRoutes ? (
+                    <p class="text-red-500 dark:text-red-400">
+                        {errorLoadingRoutes}
+                    </p>
+                ) : (
+                    <ul class="w-full grid grid-cols-1 gap-6 max-w-xl pb-4">
+                        {routes.map((route) => (
+                            <EthicalRouteCard route={route} showCreator linkToParticipate />
+                        ))}
+                    </ul>
+                )
+            }
+        </main>
+    </AppLayout>
+</Layout>

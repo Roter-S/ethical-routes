@@ -207,11 +207,11 @@ const EthicalRouteDropzone = () => {
         <button
           onClick={uploadToFirestore}
           disabled={!isValid() || isUploading()}
-          class={`w-full py-2 px-4 rounded-lg font-medium text-white transition-colors
-      ${isValid() && !isUploading()
-              ? "bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
-              : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed"
-            }`}
+          class={`w-full py-2 px-4 rounded-md font-medium text-sm flex items-center justify-center transition-colors duration-150
+            ${isValid() && !isUploading()
+              ? "bg-blue-600 hover:bg-blue-700 border border-blue-700 focus:ring-2 focus:ring-blue-400 focus:outline-none text-white"
+              : "bg-zinc-400 dark:bg-zinc-700 cursor-not-allowed text-white border border-zinc-400 dark:border-zinc-700"}
+          `}
         >
           {isUploading() ? (
             <span class="flex items-center justify-center">
@@ -228,13 +228,13 @@ const EthicalRouteDropzone = () => {
         <div class="flex gap-2 mt-4">
           <a
             href={`/edit/${docId()}`}
-            class="w-full text-center py-2 px-4 rounded-lg font-medium text-white bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 transition-colors"
+            class="w-full text-center py-2 px-4 rounded-md font-medium text-sm text-white bg-green-600 hover:bg-green-700 border border-green-700 focus:ring-2 focus:ring-green-400 focus:outline-none transition-colors"
           >
             Ver
           </a>
           <button
             onClick={resetForm}
-            class="w-full py-2 px-4 rounded-lg font-medium text-white bg-zinc-600 hover:bg-zinc-700 dark:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
+            class="w-full py-2 px-4 rounded-md font-medium text-sm text-white bg-zinc-600 hover:bg-zinc-700 border border-zinc-700 focus:ring-2 focus:ring-zinc-400 focus:outline-none transition-colors"
           >
             Nuevo
           </button>

@@ -4,12 +4,27 @@ import AppLayout from "@layouts/AppLayout.astro";
 import EthicalRouteList from "@components/EthicalRouteList";
 import { firestore } from "@lib/firebase/server";
 import type { EthicalRouteWithDifference } from "@lib/types";
+import { getUser } from "@lib/utils";
 
 let routes: EthicalRouteWithDifference[] = [];
 let errorLoadingRoutes: string | null = null;
 
+const sessionCookie = Astro.cookies.get("session")?.value ?? null;
+let user = null;
+if (sessionCookie) {
+  user = await getUser(sessionCookie);
+}
+
+if (!user) {
+  return Astro.redirect("/signin", 302);
+}
+
 try {
-  const snapshot = await firestore.collection("ethical_routes").orderBy("created_at", "desc").get();
+  const snapshot = await firestore
+    .collection("ethical_routes")
+    .where("created_by", "==", user.uid)
+    .orderBy("created_at", "desc")
+    .get();
   routes = snapshot.docs.map((doc) => {
     const routeData = doc.data();
     return {

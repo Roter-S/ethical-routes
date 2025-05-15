@@ -49,10 +49,17 @@ export const GET: APIRoute = async ({ params, cookies }) => {
 };
 
 export const PATCH: APIRoute = async ({ params, request, cookies }) => {
-  const isAdmin = await verifyAdmin(request, cookies);
-  if (!isAdmin) {
-    return new Response(JSON.stringify({ error: "Acceso denegado: se requiere rol de administrador" }), { status: 403 });
+  const sessionCookieValue = cookies.get("session")?.value;
+  if (!sessionCookieValue) {
+    return new Response(JSON.stringify({ error: "No autorizado" }), { status: 401 });
   }
+  let decodedIdToken;
+  try {
+    decodedIdToken = await adminAuth.verifySessionCookie(sessionCookieValue, true);
+  } catch {
+    return new Response(JSON.stringify({ error: "Sesión inválida" }), { status: 401 });
+  }
+  const uid = decodedIdToken.uid;
 
   const { id } = params;
   if (!id) {
@@ -60,6 +67,23 @@ export const PATCH: APIRoute = async ({ params, request, cookies }) => {
   }
 
   try {
+    const docRef = firestore.collection("ethical_routes").doc(id);
+    const docSnap = await docRef.get();
+    if (!docSnap.exists) {
+      return new Response(JSON.stringify({ error: "Ruta ética no encontrada para actualizar" }), { status: 404 });
+    }
+    const routeData = docSnap.data();
+    if (!routeData) {
+      return new Response(JSON.stringify({ error: "Datos de la ruta no disponibles" }), { status: 500 });
+    }
+    // Verificar permisos: admin puede editar todo, user solo si es el creador
+    const userDoc = await firestore.collection("users").doc(uid).get();
+    const userRole = userDoc.exists ? userDoc.data()?.role : "user";
+    const isAdmin = userRole === "admin";
+    if (!isAdmin && routeData.created_by !== uid) {
+      return new Response(JSON.stringify({ error: "Acceso denegado: solo puedes editar tus propias rutas" }), { status: 403 });
+    }
+
     const body = await request.json();
     const validationResult = EthicalRouteUpdateSchema.safeParse(body);
 
@@ -82,12 +106,6 @@ export const PATCH: APIRoute = async ({ params, request, cookies }) => {
       updated_at: admin.firestore.FieldValue.serverTimestamp(),
     };
 
-    const docRef = firestore.collection("ethical_routes").doc(id);
-    const docSnap = await docRef.get();
-    if (!docSnap.exists) {
-      return new Response(JSON.stringify({ error: "Ruta ética no encontrada para actualizar" }), { status: 404 });
-    }
-
     await docRef.update(dataToUpdate);
     return new Response(null, { status: 204 });
 
@@ -101,11 +119,6 @@ export const PATCH: APIRoute = async ({ params, request, cookies }) => {
 };
 
 export const DELETE: APIRoute = async ({ params, request, cookies }) => {
-  const isAdmin = await verifyAdmin(request, cookies);
-  if (!isAdmin) {
-    return new Response(JSON.stringify({ error: "Acceso denegado: se requiere rol de administrador" }), { status: 403 });
-  }
-
   const { id } = params;
   if (!id) {
     return new Response(JSON.stringify({ error: "ID de ruta no proporcionado" }), { status: 400 });

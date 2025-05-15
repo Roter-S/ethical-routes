@@ -1,12 +1,26 @@
-import { firestore } from "@lib/firebase/server";
+import { firestore, auth } from "@lib/firebase/server";
 import type { APIRoute } from "astro";
 import admin from "firebase-admin";
 import { EthicalRouteSchema } from "@lib/ethicalRouteSchemas";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   try {
+    const sessionCookie = cookies.get("session")?.value;
+    if (!sessionCookie) {
+      return new Response(JSON.stringify({ message: "No autorizado" }), { status: 401 });
+    }
+    let decodedIdToken;
+    try {
+      decodedIdToken = await auth.verifySessionCookie(sessionCookie, true);
+    } catch {
+      return new Response(JSON.stringify({ message: "Sesión inválida" }), { status: 401 });
+    }
+    const uid = decodedIdToken.uid;
+
     const body = await request.json();
-    const validationResult = EthicalRouteSchema.safeParse(body);
+    // Eliminar participations si viene en el body
+    const { participations, ...rest } = body;
+    const validationResult = EthicalRouteSchema.safeParse(rest);
 
     if (!validationResult.success) {
       return new Response(
@@ -20,6 +34,8 @@ export const POST: APIRoute = async ({ request }) => {
 
     const dataToStore = {
       ...validationResult.data,
+      participations: 0,
+      created_by: uid,
       created_at: admin.firestore.FieldValue.serverTimestamp(),
       updated_at: admin.firestore.FieldValue.serverTimestamp(),
     };
