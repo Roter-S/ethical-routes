@@ -6,6 +6,8 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonicalURL = new URL(Astro.url).href;
+
+import "../styles/global.css";
 ---
 
 <html lang="es" class="w-full h-full">
@@ -14,7 +16,6 @@ const canonicalURL = new URL(Astro.url).href;
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" class="light" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
-    <link href="/src/styles/global.css" rel="stylesheet" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <meta name="title" content={title} />

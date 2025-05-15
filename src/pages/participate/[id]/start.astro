@@ -1,0 +1,60 @@
+---
+import Layout from "@layouts/Layout.astro";
+import AppLayout from "@layouts/AppLayout.astro";
+import { firestore } from "@lib/firebase/server";
+import type { EthicalRouteTypeWithId } from "@lib/types";
+import EthicalRouteTree from "@components/EthicalRouteTree";
+
+const { id } = Astro.params;
+let routeData: EthicalRouteTypeWithId | null = null;
+let errorPage: Response | null = null;
+
+if (!id) {
+    errorPage = Astro.redirect("/all");
+}
+
+if (!errorPage && id) {
+    try {
+        const routeDoc = await firestore
+            .collection("ethical_routes")
+            .doc(id)
+            .get();
+        if (!routeDoc.exists) {
+            errorPage = Astro.redirect("/404");
+        } else {
+            const data = routeDoc.data();
+            routeData = {
+                documentId: routeDoc.id,
+                question: data?.question || "Pregunta no disponible",
+                description: data?.description || "Descripción no disponible",
+                participations: data?.participations || 0,
+                created_at: data?.created_at || new Date(),
+                branches: data?.branches,
+            } as EthicalRouteTypeWithId & { branches?: Record<string, any> };
+        }
+    } catch (error) {
+        console.error(`Error fetching ethical route with ID ${id}:`, error);
+        errorPage = Astro.redirect("/404");
+    }
+}
+
+if (errorPage) {
+    return errorPage;
+}
+---
+
+<Layout title={`Recorrido: ${routeData?.question ?? ""} - Rutas Éticas`}>
+    <AppLayout>
+        <main class="w-full mx-auto max-w-2xl mt-10 flex flex-col items-center">
+            <h1 class="font-bold text-2xl sm:text-3xl text-center mb-2 dark:text-zinc-100 text-zinc-900">
+                {routeData?.question}
+            </h1>
+            <p class="text-zinc-600 dark:text-zinc-300 mb-6 text-center">
+                {routeData?.description}
+            </p>
+            {routeData?.branches && (
+                <EthicalRouteTree tree={routeData} client:idle />
+            )}
+        </main>
+    </AppLayout>
+</Layout> 

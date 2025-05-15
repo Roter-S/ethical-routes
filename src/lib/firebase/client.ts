@@ -2,7 +2,6 @@ import { getAuth } from "firebase/auth";
 import { getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-// Configuración de Firebase obtenida de variables de entorno públicas
 const firebaseConfig = {
   apiKey: import.meta.env.PUBLIC_FIREBASE_API_KEY,
   authDomain: import.meta.env.PUBLIC_FIREBASE_AUTH_DOMAIN,

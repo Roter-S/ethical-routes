@@ -9,28 +9,15 @@ function initializeAdminApp(): AdminApp {
     return getApps()[0];
   }
 
-  // Intenta inicialización por defecto en producción si no hay FIREBASE_PROJECT_ID (para entornos como Cloud Functions)
   if (import.meta.env.PROD && !import.meta.env.FIREBASE_PROJECT_ID) {
     console.info(
       "PROD env & no FIREBASE_PROJECT_ID, attempting default app initialization."
     );
     try {
-      return initializeApp();
+    return initializeApp();
     } catch (e) {
       console.warn("Default app initialization failed. Proceeding with service account if configured: ", e);
     }
-  }
-
-  // Variables de entorno requeridas para crear las credenciales de la cuenta de servicio
-  const requiredEnvVarsForServiceAccount: (keyof ServiceAccount | 'FIREBASE_PRIVATE_KEY')[] = [
-    'projectId',
-    'clientEmail',
-    // 'privateKey' se maneja a través de FIREBASE_PRIVATE_KEY por la necesidad de reemplazar \n
-  ];
-  const envVarNames = {
-      projectId: "FIREBASE_PROJECT_ID",
-      clientEmail: "FIREBASE_CLIENT_EMAIL",
-      privateKey: "FIREBASE_PRIVATE_KEY"
   }
 
   const missingVars: string[] = [];

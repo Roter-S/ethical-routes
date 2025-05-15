@@ -13,7 +13,6 @@ export const POST: APIRoute = async ({ cookies, redirect }) => {
     }
   }
 
-  // Eliminar la cookie de sesión del navegador.
   cookies.delete("session", {
     path: "/",
   });
