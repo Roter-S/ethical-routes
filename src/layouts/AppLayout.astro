@@ -54,7 +54,8 @@ const user = Astro.locals.user;
       }
       <div class="ml-1 sm:ml-0">
         <SignoutButton
-          className="w-10 h-10 sm:w-auto sm:h-auto flex items-center justify-center text-lg"
+          class="w-10 h-10 sm:w-auto sm:h-auto flex items-center justify-center text-lg"
+          client:idle
         />
       </div>
     </div>
