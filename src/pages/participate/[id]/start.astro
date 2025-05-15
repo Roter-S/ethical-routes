@@ -4,6 +4,7 @@ import AppLayout from "@layouts/AppLayout.astro";
 import { firestore } from "@lib/firebase/server";
 import type { EthicalRouteTypeWithId } from "@lib/types";
 import EthicalRouteTree from "@components/EthicalRouteTree";
+import ArrowLeftIcon from "@components/icons/ArrowLeftIcon";
 
 const { id } = Astro.params;
 let routeData: EthicalRouteTypeWithId | null = null;
@@ -46,15 +47,27 @@ if (errorPage) {
 <Layout title={`Recorrido: ${routeData?.question ?? ""} - Rutas Éticas`}>
     <AppLayout>
         <main class="w-full mx-auto max-w-2xl mt-10 flex flex-col items-center">
-            <h1 class="font-bold text-2xl sm:text-3xl text-center mb-2 dark:text-zinc-100 text-zinc-900">
+            <a
+                href="/all/"
+                class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
+            >
+                <ArrowLeftIcon class="w-4 h-4" />
+                Regresar ver todos
+            </a>
+            <h1
+                class="font-bold text-2xl sm:text-3xl text-center mb-2 dark:text-zinc-100 text-zinc-900"
+            >
                 {routeData?.question}
             </h1>
             <p class="text-zinc-600 dark:text-zinc-300 mb-6 text-center">
                 {routeData?.description}
             </p>
-            {routeData?.branches && (
-                <EthicalRouteTree tree={routeData} client:idle />
-            )}
+            {
+                routeData?.branches && (
+                    <EthicalRouteTree tree={routeData} client:idle />
+                )
+            }
         </main>
     </AppLayout>
-</Layout> 
+</Layout>
+

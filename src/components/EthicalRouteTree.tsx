@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 
 interface BranchNode {
   question?: string;
@@ -10,6 +10,7 @@ interface BranchNode {
 
 interface EthicalRouteTreeProps {
   tree: {
+    documentId: string;
     question: string;
     branches: Record<string, BranchNode>;
   };
@@ -53,9 +54,21 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
   const maxSteps = 6;
   const progress = Math.min(100, ((history().length + (finished() ? 1 : 0)) / maxSteps) * 100);
 
+  createEffect(() => {
+    if (finished()) {
+      fetch(`/api/ethical-routes/${props.tree.documentId}/participation`, {
+        method: 'POST',
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Falló la actualización');
+          console.log('Participations incrementado');
+        })
+        .catch(err => console.warn(err));
+    }
+  });
+
   return (
     <div class="w-full flex flex-col items-center">
-      {/* Barra de progreso */}
       {history().length > 0 && !finished() && (
         <div class="mb-4 w-full flex items-center gap-2">
           <div class="flex-1 h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
