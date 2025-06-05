@@ -2,13 +2,14 @@
 import Layout from "@layouts/Layout.astro";
 import AppLayout from "@layouts/AppLayout.astro";
 import EthicalRouteDropzone from "@components/EthicalRouteDropzone";
+import CreateEthicalRoute from "@components/CreateEthicalRoute";
 import ArrowLeftIcon from "@components/icons/ArrowLeftIcon";
 ---
 
 <Layout title="Agregar Caso Ético - Rutas Éticas">
   <AppLayout>
     <main class="w-full h-full flex flex-col items-center p-4">
-      <section class="w-full max-w-md">
+      <section class="w-full max-w-3xl">
         <a
           href="/dashboard/"
           class="flex text-zinc-500 gap-1 items-center mb-4 text-sm hover:text-zinc-600 dark:hover:text-zinc-400 transition-colors duration-150"
@@ -22,7 +23,21 @@ import ArrowLeftIcon from "@components/icons/ArrowLeftIcon";
           Agregar Nuevo Caso Ético
         </h1>
       </section>
-      <EthicalRouteDropzone client:load />
+
+      <div class="w-full max-w-3xl flex flex-col gap-8">
+        <div class="bg-white dark:bg-zinc-800 p-6 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700">
+          <h2 class="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-4">
+            Crear desde Archivo JSON
+          </h2>
+          <EthicalRouteDropzone client:load />
+        </div>
+        <div class="bg-white dark:bg-zinc-800 p-6 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700">
+          <h2 class="text-lg font-medium text-zinc-900 dark:text-zinc-100 mb-4">
+            Crear desde Formulario
+          </h2>
+          <CreateEthicalRoute client:load />
+        </div>
+      </div>
     </main>
   </AppLayout>
 </Layout>

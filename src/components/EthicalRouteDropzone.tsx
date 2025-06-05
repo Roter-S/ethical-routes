@@ -145,7 +145,7 @@ const EthicalRouteDropzone = () => {
   };
 
   return (
-    <div class="w-full max-w-md">
+    <div class="w-full">
       <div
         ref={dropzoneRef}
         class={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer mb-4 transition-colors

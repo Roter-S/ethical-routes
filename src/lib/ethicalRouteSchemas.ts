@@ -1,21 +1,38 @@
 import { z } from "zod";
-import type { BranchType } from "@lib/types";
 
-export const BranchSchema: z.ZodType<BranchType> = z.lazy(() =>
-  z.object({
-    conclusion: z.string().trim().optional(),
-    advice: z.string().trim().optional(),
-    comentario_final: z.string().trim().optional(),
-    question: z.string().trim().optional(),
-    branches: z.record(BranchSchema).optional(),
-  })
+type BranchType = {
+  question?: string;
+  branches?: Record<string, BranchType>;
+  conclusion?: string;
+  advice?: string;
+  comentario_final?: string;
+};
+
+const BranchSchema: z.ZodType<BranchType> = z.object({
+  question: z.string().optional(),
+  branches: z.record(z.lazy(() => BranchSchema)).optional(),
+  conclusion: z.string().optional(),
+  advice: z.string().optional(),
+  comentario_final: z.string().optional(),
+}).refine(
+  (data) => {
+    // Al menos debe tener una de estas propiedades
+    return data.question || data.conclusion || data.advice || data.comentario_final;
+  },
+  {
+    message: "Cada rama debe tener al menos una de estas propiedades: question, conclusion, advice o comentario_final"
+  }
 );
 
 export const EthicalRouteSchema = z.object({
-  question: z.string().trim().min(1, { message: "La pregunta es requerida." }),
-  description: z.string().trim().min(1, { message: "La descripción es requerida." }),
-  participations: z.number().int().nonnegative().optional().default(0),
-  branches: z.record(BranchSchema),
+  question: z.string().trim().min(1, "La pregunta es requerida"),
+  description: z.string().trim().min(1, "La descripción es requerida"),
+  branches: z.record(BranchSchema).refine(
+    (branches) => Object.keys(branches).length > 0,
+    {
+      message: "Debe haber al menos una rama"
+    }
+  ),
 });
 
 export const EthicalRouteUpdateSchema = z.object({

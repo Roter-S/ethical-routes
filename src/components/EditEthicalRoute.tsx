@@ -2,6 +2,7 @@ import { createSignal, Show } from "solid-js";
 import type { EthicalRouteTypeWithId, BranchType } from "@lib/types";
 import { DeleteDialog } from "./DeleteDialog";
 import ButtonLoading from "./ButtonLoading";
+import JsonEditor from "./JsonEditor";
 
 interface Props {
   id: string;
@@ -131,13 +132,14 @@ export default function EditEthicalRoute(props: Props) {
                 >
                   Branches (JSON)
                 </label>
-                <textarea
-                  name="branches"
-                  id="branches"
-                  class="w-full p-2 border rounded min-h-[200px] font-mono text-sm text-zinc-600 dark:text-zinc-300"
-                >
-                  {JSON.stringify(data().branches || {}, null, 2)}
-                </textarea>
+                <JsonEditor
+                  value={JSON.stringify(data().branches || {}, null, 2)}
+                  onChange={(value) => {
+                    const form = document.querySelector('form') as HTMLFormElement;
+                    const fd = new FormData(form);
+                    fd.set('branches', value);
+                  }}
+                />
               </div>
 
               <div class="flex flex-col sm:flex-row gap-2 mt-4">
