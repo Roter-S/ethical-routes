@@ -57,23 +57,37 @@ async function postFormData({
 }
 
 async function googleSignIn() {
-  const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-  const idToken = await cred.user.getIdToken();
+  try {
+    const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+    const idToken = await cred.user.getIdToken();
 
-  const res = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken }),
-  });
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
 
-  if (!res.ok) return await res.json();
-  if (res.redirected) window.location.replace(res.url);
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Error en el inicio de sesión con Google");
+    }
+    
+    if (res.redirected) {
+      // Mostrar el loader antes de la redirección
+      document.dispatchEvent(new Event("astro:before-preparation"));
+      window.location.replace(res.url);
+    }
+  } catch (error: any) {
+    console.error("Error en el inicio de sesión con Google:", error);
+    return { error: error.message || "Error en el inicio de sesión con Google" };
+  }
 }
 
 export default function LoginForm() {
   const [formData, setFormData] = createSignal<SuccessForm>();
   const [response] = createResource(formData, postFormData);
   const [clientErrors, setClientErrors] = createSignal<Errors>();
+  const [isGoogleLoading, setIsGoogleLoading] = createSignal(false);
 
   const [email, setEmail] = createSignal(DEFAULT_CREDENTIALS.email);
   const [password, setPassword] = createSignal(DEFAULT_CREDENTIALS.password);
@@ -89,6 +103,17 @@ export default function LoginForm() {
       return;
     }
     setFormData(result.data);
+  }
+
+  async function handleGoogleSignIn() {
+    setIsGoogleLoading(true);
+    try {
+      await googleSignIn();
+    } catch (error: any) {
+      console.error("Error en el inicio de sesión con Google:", error);
+    } finally {
+      setIsGoogleLoading(false);
+    }
   }
 
   return (
@@ -153,12 +178,13 @@ export default function LoginForm() {
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-1 gap-2 sm:gap-4">
         <button
-          onclick={googleSignIn}
+          onclick={handleGoogleSignIn}
+          disabled={isGoogleLoading()}
           class="dark:bg-zinc-100 p-1.5 border border-zinc-300 dark:border-zinc-100 flex justify-center items-center gap-2 rounded-md mt-2 dark:text-zinc-900 font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-zinc-900 disabled:opacity-50 disabled:cursor-not-allowed"
           type="button"
         >
           <GoogleIcon class="h-5 w-auto" />
-          <span>Continuar con Google</span>
+          <span>{isGoogleLoading() ? "Cargando..." : "Continuar con Google"}</span>
         </button>
       </div>
       <Suspense>

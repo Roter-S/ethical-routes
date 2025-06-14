@@ -1,4 +1,8 @@
 ---
+import "../styles/global.css";
+import { ViewTransitions } from "astro:transitions";
+import GlobalLoader from "@components/GlobalLoader";
+
 interface Props {
   title: string;
   description?: string;
@@ -6,8 +10,6 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonicalURL = new URL(Astro.url).href;
-
-import "../styles/global.css";
 ---
 
 <html lang="es" class="w-full h-full">
@@ -26,6 +28,7 @@ import "../styles/global.css";
     <meta property="og:description" content={description} />
     <meta property="og:locale" content="en_GT" />
     <meta name="robots" content="follow, index" />
+    <ViewTransitions />
   </head>
   <body class="w-full h-full flex flex-col dark:bg-zinc-900 bg-zinc-100">
     <div
@@ -42,5 +45,6 @@ import "../styles/global.css";
       </div>
     </div>
     <slot />
+    <GlobalLoader client:load />
   </body>
 </html>

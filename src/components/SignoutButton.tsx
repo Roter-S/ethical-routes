@@ -10,8 +10,10 @@ export default function SignoutButton({
 }: SignoutButtonProps) {
   const handleSignOut = async () => {
     try {
+      // Activar el loader antes de iniciar el proceso de cierre de sesión
+      document.dispatchEvent(new Event("astro:before-preparation"));
+      
       await fetch("/api/auth/logout", { method: "POST" });
-
       await signOut(auth);
 
       document.cookie.split(";").forEach((c) => {
@@ -20,10 +22,10 @@ export default function SignoutButton({
           .replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
         document.cookie = cookieString;
       });
+
+      window.location.replace("/signin");
     } catch (error) {
       console.error("Error durante el proceso de cierre de sesión:", error);
-    } finally {
-      window.location.replace("/signin");
     }
   };
 
