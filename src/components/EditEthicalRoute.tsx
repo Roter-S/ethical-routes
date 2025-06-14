@@ -16,6 +16,7 @@ export default function EditEthicalRoute(props: Props) {
   const [isLoading, setIsLoading] = createSignal(!props.initialData);
   const [error, setError] = createSignal<string | null>(null);
   const [isSaving, setIsSaving] = createSignal(false);
+  const [branchesValue, setBranchesValue] = createSignal(JSON.stringify(props.initialData?.branches || {}, null, 2));
 
   if (!props.initialData) {
     fetchRouteData();
@@ -30,6 +31,7 @@ export default function EditEthicalRoute(props: Props) {
       if (!res.ok) throw new Error("No existe");
       const data = await res.json();
       setRouteData(data);
+      setBranchesValue(JSON.stringify(data.branches || {}, null, 2));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error desconocido");
     } finally {
@@ -50,12 +52,13 @@ export default function EditEthicalRoute(props: Props) {
         body: JSON.stringify({
           question: fd.get("question"),
           description: fd.get("description"),
-          branches: JSON.parse(fd.get("branches") as string),
+          branches: JSON.parse(branchesValue()),
         }),
       });
 
       if (!res.ok) {
-        throw new Error("Error al guardar los cambios");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Error al guardar los cambios");
       }
 
       window.location.replace("/dashboard");
@@ -133,11 +136,9 @@ export default function EditEthicalRoute(props: Props) {
                   Branches (JSON)
                 </label>
                 <JsonEditor
-                  value={JSON.stringify(data().branches || {}, null, 2)}
+                  value={branchesValue()}
                   onChange={(value) => {
-                    const form = document.querySelector('form') as HTMLFormElement;
-                    const fd = new FormData(form);
-                    fd.set('branches', value);
+                    setBranchesValue(value);
                   }}
                 />
               </div>

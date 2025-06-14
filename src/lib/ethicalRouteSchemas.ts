@@ -2,6 +2,7 @@ import { z } from "zod";
 
 type BranchType = {
   question?: string;
+  answer?: string;
   branches?: Record<string, BranchType>;
   conclusion?: string;
   advice?: string;
@@ -9,20 +10,22 @@ type BranchType = {
 };
 
 const BranchSchema: z.ZodType<BranchType> = z.object({
-  question: z.string().optional(),
+  question: z.string().trim().min(1).optional(),
+  answer: z.string().trim().min(1).optional(),
   branches: z.record(z.lazy(() => BranchSchema)).optional(),
-  conclusion: z.string().optional(),
-  advice: z.string().optional(),
-  comentario_final: z.string().optional(),
-}).refine(
-  (data) => {
-    // Al menos debe tener una de estas propiedades
-    return data.question || data.conclusion || data.advice || data.comentario_final;
-  },
-  {
-    message: "Cada rama debe tener al menos una de estas propiedades: question, conclusion, advice o comentario_final"
+  conclusion: z.string().trim().min(1).optional(),
+  advice: z.string().trim().min(1).optional(),
+  comentario_final: z.string().trim().min(1).optional(),
+}).transform((data, ctx) => {
+  // Si no hay answer, usar la clave del objeto
+  if (!data.answer && ctx.path.length > 0) {
+    const key = ctx.path[ctx.path.length - 1];
+    if (typeof key === 'string') {
+      return { ...data, answer: key };
+    }
   }
-);
+  return data;
+});
 
 export const EthicalRouteSchema = z.object({
   question: z.string().trim().min(1, "La pregunta es requerida"),

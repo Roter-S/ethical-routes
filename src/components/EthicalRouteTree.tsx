@@ -2,6 +2,7 @@ import { createEffect, createMemo, createSignal } from "solid-js";
 
 interface BranchNode {
   question?: string;
+  answer?: string;
   branches?: Record<string, BranchNode>;
   conclusion?: string;
   advice?: string;
@@ -50,7 +51,7 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
     const node = currentNode();
     if (!node.branches) return;
     const nextNode = node.branches[optionKey];
-    setHistory((prev) => [...prev, { question: node.question || "", answer: optionKey }]);
+    setHistory((prev) => [...prev, { question: node.question || "", answer: nextNode.answer || optionKey }]);
     if (nextNode.conclusion) {
       setResult(nextNode);
       setFinished(true);
@@ -102,13 +103,13 @@ export default function EthicalRouteTree(props: EthicalRouteTreeProps) {
           </h2>
           <div class="flex flex-col gap-4">
             {currentNode().branches
-              ? Object.entries(currentNode().branches ?? {}).map(([key]) => (
+              ? Object.entries(currentNode().branches ?? {}).map(([key, node]) => (
                 <button
                   class="w-full flex items-center justify-between py-4 px-6 rounded-xl bg-gradient-to-r from-violet-100 to-blue-100 dark:from-violet-900/40 dark:to-blue-900/40 border border-violet-200 dark:border-violet-700 shadow-md hover:scale-[1.03] hover:shadow-xl transition-all duration-200 group"
                   onClick={() => handleOption(key)}
                 >
                   <span class="text-lg font-semibold text-violet-800 dark:text-violet-200">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
+                    {node.answer || key}
                   </span>
                   <svg class="w-6 h-6 text-violet-500 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />

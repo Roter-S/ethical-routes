@@ -10,6 +10,24 @@ const { id } = Astro.params;
 let routeData: EthicalRouteTypeWithId | null = null;
 let errorPage: Response | null = null;
 
+// Función para cargar recursivamente las ramas
+async function loadBranches(docRef: any): Promise<Record<string, any>> {
+  const branches: Record<string, any> = {};
+  const branchesSnapshot = await docRef.collection("branches").get();
+  
+  for (const branchDoc of branchesSnapshot.docs) {
+    const branchData = branchDoc.data();
+    const { created_at, updated_at, ...cleanBranchData } = branchData;
+    const nestedBranches = await loadBranches(branchDoc.ref);
+    branches[branchDoc.id] = {
+      ...cleanBranchData,
+      branches: Object.keys(nestedBranches).length > 0 ? nestedBranches : undefined
+    };
+  }
+  
+  return branches;
+}
+
 if (!id) {
   errorPage = Astro.redirect("/dashboard");
 }
@@ -22,6 +40,8 @@ if (!errorPage && id) {
       errorPage = Astro.redirect("/404");
     } else {
       const data = routeDoc.data();
+      const branches = await loadBranches(routeDoc.ref);
+      
       routeData = {
         documentId: routeDoc.id,
         question: data?.question || "Pregunta no disponible",
@@ -29,8 +49,8 @@ if (!errorPage && id) {
         participations: data?.participations || 0,
         created_at: data?.created_at || new Date(),
         difference: data?.difference,
-        branches: data?.branches,
-      } as EthicalRouteTypeWithId & { branches?: Record<string, any> };
+        branches,
+      } as EthicalRouteTypeWithId;
     }
   } catch (error) {
     console.error(`Error fetching ethical route with ID ${id}:`, error);

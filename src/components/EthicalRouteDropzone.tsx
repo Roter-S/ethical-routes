@@ -62,6 +62,7 @@ const EthicalRouteDropzone = () => {
     try {
       const text = await file.text();
       const json = JSON.parse(text);
+      console.log("JSON a validar:", json); // Para depuración
       const result = EthicalRouteSchema.safeParse(json);
       if (result.success) {
         setJsonData(result.data);
@@ -69,11 +70,14 @@ const EthicalRouteDropzone = () => {
         setError(null);
       } else {
         setIsValid(false);
+        const errorDetails = result.error.errors.map((e) => {
+          const path = e.path.join(".");
+          return `${path ? `Campo '${path}': ` : ""}${e.message}`;
+        });
         setError(
-          `Error de validación: ${result.error.errors
-            .map((e) => `${e.path.join(".")} - ${e.message}`)
-            .join(", ")}`
+          `Error de validación:\n${errorDetails.join("\n")}`
         );
+        console.error("Errores de validación:", result.error); // Para depuración
       }
     } catch (err) {
       setIsValid(false);
@@ -82,6 +86,7 @@ const EthicalRouteDropzone = () => {
           err instanceof Error ? err.message : String(err)
         }`
       );
+      console.error("Error al procesar el archivo:", err); // Para depuración
     }
   };
 
